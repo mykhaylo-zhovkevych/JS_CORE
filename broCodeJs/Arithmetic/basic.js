@@ -8,9 +8,25 @@ Basic Arithmetic Operators
     Modulus (%): Returns the remainder of a division.
     Increment (++): Increases an integer value by one.
     Decrement (--): Decreases an integer value by one.
-
 */ 
 
+/*
+An operand – is what operators are applied to. 
+For instance, in the multiplication of 5 * 2 there are two operands: 
+the left operand is 5 and the right operand is 2. Sometimes, people call these 
+“arguments” instead of “operands”.
+*/
+
+/*
+Unary operators require a single operand to operate on. 
+They perform various operations, such as negating a numerical value, 
+incrementing/decrementing values, or converting a value to a different type.
+*/
+
+/*
+Binary operators require two operands to operate. 
+They are used to perform operations such as arithmetic, logical operations, or comparisons.
+*/
 
 // Basic operations
 result = 10 + 5; // 15
@@ -52,6 +68,13 @@ console.log(isEven(7)); // false
 
 
 
+/*
+Although both forms increase the variable by 1, there 
+is a difference. The Postfix Form returns the original value
+of the variable, before the increment/decrement The Prefix Form returns the value after the increment/decrement. 
+This difference can be seen if we are using the returned value of the increment/decrement.
+*/
+
 // Example 4: Prefix vs. Postfix Increment Operators
 let x = 1;
 let y = x++; // y = 1, x = 2
@@ -59,6 +82,8 @@ let z = ++x; // z = 3, x = 3
 
 console.log(`y: ${y}, x after y: ${x}`);
 console.log(`z: ${z}, x after z: ${x}`);
+
+
 
 // Example 5: Compound Assignment Operators
 let a = 10;
