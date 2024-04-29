@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Squares</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a; /* The dark background */
+    height: 200vh; /* Set the height to allow scrolling */
+  }
+
+  .box {
+    width: 100px; /* Width of the squares */
+    height: 100px; /* Height of the squares */
+    margin: 250px; /* Space between the squares */
+  }
+
+  .green {
+    background-color: green; /* Green box */
+  }
+
+  .blue {
+    background-color: blue; /* Blue box */
+  }
+
+  .red {
+    background-color: red; /* Red box that will be animated */
+  }
+</style>
+</head>
+<body>
+
+<div class="box green"></div>
+<div class="box blue"></div>
+<div class="box red c"></div> <!-- The 'c' class is for the GSAP targeting -->
+
+<!-- Load GSAP and the ScrollTrigger plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.to(".c", {
+    scrollTrigger: {
+      trigger: ".c",
+      start: "top center",
+      end: "top 100px",
+      scrub: true,
+      markers: true
+    },
+    x: 400,
+    rotation: 360,
+    ease: "none",
+    duration: 3
+  });
+</script>
+
+</body>
+</html>

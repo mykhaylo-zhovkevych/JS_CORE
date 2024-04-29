@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horizontal Snapping Sections</title>
+<style>
+  body, html {
+ /*    margin: 0;
+    padding: 0; */
+    overflow-x: hidden; /* Hide horizontal scroll */
+    overflow-y: auto;
+    width: 100vw;
+    
+      
+
+   
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: row;
+    width: 100vw; /* Adjust width according to the number of panels you have */
+    height: 100vh; /* Full height */
+  }
+  
+  .panel {
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    flex-shrink: 0; /* Prevent flexbox from shrinking the panels */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vw; /* Large text so it's readable */
+    color: white;
+  }
+  .section_three {
+    position: absolute;
+    /* display: flex; */
+    margin-top: 185rem;
+
+
+}
+  /* Individual panel background colors */
+  .panel:nth-child(1) { background-color: green; }
+  .panel:nth-child(2) { background-color: blue; }
+  .panel:nth-child(3) { background-color: red; }
+</style>
+</head>
+<body>
+    <section class="section_three">
+<div class="container">
+  <div class="panel">Panel 1</div>
+  <div class="panel">Panel 2</div>
+  <div class="panel">Panel 3</div>
+</div>
+</section>
+<!-- Load GSAP and the ScrollTrigger plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+ /*  gsap.registerPlugin(ScrollTrigger); */
+
+  let sections = gsap.utils.toArray(".panel");
+  
+  gsap.to(sections, {
+    xPercent: -100 * (sections.length - 1),
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".container",
+      pin: true,
+      scrub: 1,
+      snap: 1 / (sections.length - 1),
+      end: () => "+=" + document.querySelector(".container").offsetWidth
+    }
+  });
+</script>
+
+</body>
+</html>

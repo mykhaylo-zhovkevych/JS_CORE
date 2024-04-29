@@ -107,3 +107,39 @@ document.body.appendChild(scriptST);
 
 </script> 
 */
+
+
+
+
+/*  
+
+gsap.to(".item-b", {
+  scrollTrigger: {
+    trigger: ".item-a", 
+    
+    endTrigger: ".item-c",
+    end: "bottom 80%",
+    markers: true,
+    toggleActions: "restart pause reverse pause"
+    
+                                      
+    }, 
+  x: 200, 
+  rotation: 360,
+  duration: 3
+}); 
+
+*/
+
+// starts the animation when it has reached the bott
+/* "20px 90%" */ /* "top center" */ // the 90 sets the sctoller-start
+/* () => "+=" + document.querySelector(".item-c").offsetWidth */ /* "+=300"  */// here can be made function with danamic value when the screen resize
+                                      /*  restart: Restarts the animation from the beginning.
+                                          play: Plays the animation from its current position.
+                                          pause: Pauses the animation.
+                                          resume: Resumes the animation from where it was paused.
+                                          reverse: Reverses the animation (if it was paused or has been played before).
+                                          reset: Resets the animation to its initial state.
+                                          complete: Jumps the animation to the end.
+                                          none: Does nothing. 
+                                      */
