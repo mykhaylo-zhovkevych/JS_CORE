@@ -36,6 +36,7 @@
     <div class="div2">
         <div class="square"></div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/ScrollTrigger.min.js"></script>
     <script>
@@ -49,10 +50,13 @@
                 // start align with the start of the element and the same but opposite is in the end
                 start: "top 30%",
                 end: ( ) => `+=${document.querySelector(".square").offsetHeight}`,
+                toggleActions: "restart      none     none          none ",
+                //             onEnter    onLeave  onEnterBack   onLeaveBack
                 markers: true,
                 toggleClass: "red"
             }
         });
+        // 4:52 / 10:07 https://www.youtube.com/watch?v=If_Yp4TCt9c&list=PLMPgoZdlPumexxtvuPUB3TY7LExI1N_Xp&index=3
     </script>
 </body>
 </html>
