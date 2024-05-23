@@ -22,30 +22,30 @@
       score.wins = 0;
       score.losses = 0;
       score.ties = 0;
-     /*  localStorage.removeItem('score'); */
+      localStorage.removeItem('score');
     ">Reset Score</button>
 
     <script>
-      /* let score = JSON.parse(localStorage.getItem('score')) || {
-        wins: 0,
-        losses: 0,
-        ties: 0
-      }; */
-      const score = {
-        wins: 0, 
-        losses: 0,
-        ties: 0
-      };
-      /*
-      if (!score) {
-        score = {
+    /*In JavaScript, variables declared with const cannot be reassigned, 
+    while those declared with let can be reassigned. This distinction is important when you need to 
+    update the value of a variable after its initial assignment.
+    1. Initial Assignment: When you retrieve the score from localStorage and parse it, you are assigning the parsed object to the score variable.
+    2. Conditional Reassignment: You then check if the score is null. If it is, you reassign score to a new object with default values.
+    */
+
+      // here it is like afer the page is reloaded it will get the JSON String (score)
+      // but i need to convert back it to the js object by the JSON.parse
+      let score = JSON.parse(localStorage.getItem('score')); 
+        // this default value is in case the score bill be deleted and another methods need it but wehn it is null than it will give me like error
+        if (score === null ) {
+          score = {
           wins: 0,
           losses: 0,
           ties: 0
         };
       }
-      */
 
+     
       function playGame(playerMove) {
         const computerMove = pickComputerMove();
 
@@ -87,7 +87,11 @@
           score.ties += 1;
         }
 
-        /* localStorage.setItem('score', JSON.stringify(score)); */
+        // localStorage support only the Strings
+        // here it must be converted witht the JSON String
+        localStorage.setItem('score', JSON.stringify(score));
+
+
         // templet String have feature: mult-line strings
         alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result}
         Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`);

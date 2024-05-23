@@ -88,5 +88,34 @@ JSON */
 JSON.stringify(product2)
 console.log(JSON.stringify(product2));
 
+// convertio of the JSON object ot the JS
+// this jsonString variable is temporary after the page will be reload the data will be lost 
+const jsonString = JSON.stringify(product2);
+console.log(JSON.parse(jsonString));
+
+// the example of this third way will be in the html 
+/* Next built-in object:
+localStorage
+- save values more permanently */
 
 
+// More Details
+// null vs undefined
+// null = is used when you want to explicitly indicate that a variable should be empty or have no value.
+// undefined =  is the default value for variables that have been declared but not yet assigned a value.
+
+// Auto-Boxing 
+// When you try to access a property or method on a primitive value, 
+// Auto-boxing specifically refers to the process by which JavaScript automatically wraps primitive values with their corresponding object wrappers so that methods and properties can be accessed on those primitives.
+let str = "hello";
+
+// Auto-boxing occurs here: 'str' is temporarily converted to a String object
+let upperStr = str.toUpperCase();
+
+console.log(upperStr); // Output: "HELLO"
+
+/*
+Auto-boxing is the process where JavaScript automatically converts primitive 
+types to their corresponding object types when a property or method is accessed on the primitive. 
+This allows primitives to temporarily act like objects and use the methods and properties defined on their object counterparts.
+*/
