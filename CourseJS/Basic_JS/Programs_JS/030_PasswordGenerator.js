@@ -1,3 +1,4 @@
+// function
 function generatePassword(length, includeLowerCase, includeUpperCase, includeNumbers, includeSymbols) {
 
     const lowerCaseChars = "abcdefghijklmnopqrstuvwxyzt";
@@ -23,7 +24,7 @@ function generatePassword(length, includeLowerCase, includeUpperCase, includeNum
    }
    // random character will be selected from the choices that user makes 
 
-   for(let i = 0; i <length; i++) {
+   for (let i = 0; i < length; i++) {
                             // here will be given a random number between the 0 and 25
         const randomIndex = Math.floor(Math.random() * allowedChars.length);
         // the random choosen characters from the String will be concutinated
@@ -33,13 +34,13 @@ function generatePassword(length, includeLowerCase, includeUpperCase, includeNum
 return password;
 }
 
-const passwordLength = 7742;
+const passwordLength = 17;
 const includeLowerCase = true;
 const includeUpperCase = true;
 const includeNumbers = true;
 const includeSymbols = true;
 
-const password = generatePassword(passwordLength,includeLowerCase, includeUpperCase, includeNumbers, includeSymbols );
+const password = generatePassword(passwordLength, includeLowerCase, includeUpperCase, includeNumbers, includeSymbols);
 
 
 console.log(`Generated password: ${password}`);

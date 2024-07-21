@@ -8,8 +8,9 @@ const PI = 3.14;
 
 // this look if th valeus is the same and not the type == 
 // with this it will not only be compared by the value but also with data type
-if(PI == "3.14"){
+if(PI === "3.14"){
     console.log("true");
 } else {
     console.log("false");
 }
+// output will be false because PI is a number and "3.14" is a string

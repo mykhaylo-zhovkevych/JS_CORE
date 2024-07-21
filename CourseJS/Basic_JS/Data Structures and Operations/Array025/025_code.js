@@ -44,3 +44,11 @@ fruits.sort();
 // do opisite
 fruits.sort().reverse();
 
+
+
+// print the array in the revers order
+let phones = ["samsung", "huawei", "oppa", "google-pixel"];
+
+for (let i = phones.length - 1; i >= 0; i --) {
+    console.log(phones[i]);
+}
