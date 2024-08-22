@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .buttons {
+        padding: 2rem;
+        margin: 1rem;
+        width: 15rem;
+        background-color: lightgray; /* Standardfarbe */
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="buttons-container">
+      <button class="buttons">1</button>
+      <button class="buttons">2</button>
+      <button class="buttons">3</button>
+    </div>
+
+    <script>
+      // Alle Buttons auswählen
+      const buttons = document.querySelectorAll(".buttons");
+      // Aufgabe 02
+      const container = document.getElementById("buttons-container");
+
+      // Aufgabe 02
+      // Event-Listener für den Container
+      // Erklärung: fügt dem Container eine click Event-Listener hinzu, der eine Nachricht in der Konsole schreibt, wenn der Container geklickt wird.
+      container.addEventListener("click", function (event) {
+        console.log("Container clicked");
+      });
+
+      // Schleife durch alle Buttons
+      buttons.forEach((replaceVariable) => {
+        // Event-Listener für das Überfahren des replaceVariables
+        replaceVariable.addEventListener("mouseover", green);
+
+        // Event-Listener für das Verlassen des replaceVariables
+        replaceVariable.addEventListener("mouseout", red);
+
+        // Aufgabe02
+        replaceVariable.addEventListener("click", function (event) {
+          // Fehlerhaftes Klammern wurde korrigiert
+          console.log("Button clicked");
+        });
+      });
+
+      function green(event) {
+        event.target.style.backgroundColor = "green";
+      }
+
+      function red(event) {
+        event.target.style.backgroundColor = "red";
+      }
+    </script>
+  </body>
+</html>

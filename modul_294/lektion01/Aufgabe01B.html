@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>JS - Fun</h1>
+
+    <div>
+      <!-- the function recives the event object as an argument, this object contains the information about the event that occurred(in this case if the button is clikced) -->
+      <button onclick="clickButton(event)">Anne</button>
+
+      <button onclick="clickButton(event)">Bernd</button>
+
+      <button onclick="clickButton(event)">Cleo</button>
+    </div>
+
+    <h2 id="ausgabe"></h2>
+
+    <script>
+      function clickButton(event) {
+        // Accessing Clicked Button: Inside the function, event.target refers to the specific button element that was clicked.
+        document.getElementById("ausgabe").innerHTML = event.target.innerHTML;
+      }
+    </script>
+  </body>
+</html>

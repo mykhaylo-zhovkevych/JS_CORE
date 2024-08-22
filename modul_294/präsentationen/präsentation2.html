@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Array to HTML List</title>
+  </head>
+  <body>
+    <ul id="fruit-list"></ul>
+
+    <script>
+      // Schritt 1
+      const fruits = ["Apple", "Raspberry", "Cherry"];
+      // Schritt 2
+      // Erklärung: map(): Wandelt jedes Element in einen HTML-Listeneintrag um.
+      // join(''): Verbindet diese Listeneinträge zu einem einzigen HTML-String.
+
+      //    variable, array, function, platzhalter, arrow function, index value, join function
+      const listItems = fruits.map((fruit) => `<li>${fruit}</li>`).join("");
+      // Schritt 3
+      document.getElementById("fruit-list").innerHTML = listItems;
+    </script>
+  </body>
+</html>

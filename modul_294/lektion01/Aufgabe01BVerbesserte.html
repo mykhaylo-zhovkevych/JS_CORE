@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>JS - Fun</h1>
+
+    <div>
+      <button id="button1">Anne</button>
+      <button id="button2">Bernd</button>
+      <button id="button3">Cleo</button>
+    </div>
+
+    <h2 id="ausgabe"></h2>
+
+    <script>
+      function clickButton(event) {
+        document.getElementById("ausgabe").innerHTML = event.target.innerHTML;
+      }
+
+      // Ereignisbehandlung initialisieren (nach der clickButton-Funktion)
+      var buttons = document.getElementsByTagName("button");
+
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].onclick = clickButton;
+      }
+    </script>
+  </body>
+</html>

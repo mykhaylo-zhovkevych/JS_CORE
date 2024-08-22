@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event-Objekt Beispiel</title>
+    <style>
+      #myButton {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="myButton">Click me!</button>
+    <p id="info"></p>
+
+    <script>
+      // Funktion, die beim Klick auf den Button ausgeführt wird
+      function handleClick(event) {
+        // Zugriff auf das Event-Objekt
+        const infoParagraph = document.getElementById("info");
+
+        // Informationen aus dem Event-Objekt
+        const xPos = event.clientX; // X-Position der Maus
+        const yPos = event.clientY; // Y-Position der Maus
+
+        // Zeige Informationen im <p> Element an
+        infoParagraph.innerHTML = `You clicked at position (${xPos}, ${yPos}).`;
+      }
+
+      // Button auswählen und Event-Listener hinzufügen
+      document
+        .getElementById("myButton")
+        .addEventListener("click", handleClick);
+    </script>
+  </body>
+</html>

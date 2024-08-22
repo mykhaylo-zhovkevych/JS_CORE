@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IT-Modulen</title>
+  </head>
+  <!-- 
+Erstelle eine HTML-Seite mit zwei Input-Elementen: <input type="text" id="modul"> und <input type="text" id="modul"> und einem Absende-Button <button id="send">Eintragen</button zum Bewerten von IT-Modulen (e.g. M293 Webseite erstellen). 
+Dem Benutzer soll der Modulname und die Bewertung (1 - 5) übergeben werden. Die eingegeben Wertpaare werden beim Klicken auf den Button 
+auf sinnvolle Werte geprüft (1 Punkt, siehe value-Attribut der Input-Elemente) 
+in eine darunterliegende HTML-Tabelle eingefügt (1 Punkt) 
+und zwar der Bewertung nach absteigend (1 Punkt). 
+Das ganze ist rein mit JS clientseitig lösbar. Natürlich sind alle Werte futsch, wenn man die Seite neu lädt. Das soll für diese Aufgabe nicht weiter stören. 
+Erwartet wird ein ZIP-File für des erstellten Web-Projekts. Der Auftrag darf gerne paarweise ausgeführt werden. Bite gebt bei der Abgabe an, wer mit wem gearbeitet hat. Bitte gebt jeder einzeln ab.
+ -->
+  <link rel="stylesheet" href="style.css" />
+  <body>
+    <h1>Bewertung von IT-Modulen</h1>
+    <hr />
+    <br />
+
+    <label for="modul">Modulname:</label>
+    <input type="text" id="modul" required />
+
+    <label for="bewertung">Bewertung von 1 bis 5: </label>
+    <input type="number" id="bewertung" min="1" max="5" required />
+
+    <button id="send">Eintragen</button>
+    <br /><br />
+    <hr />
+
+    <h2>Bewertungen</h2>
+    <table id="bewertungstabelle">
+      <thead>
+        <tr>
+          <th>Modulname</th>
+          <th>Bewertung</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script src="code.js"></script>
+  </body>
+</html>
