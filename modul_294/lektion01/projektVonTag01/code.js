@@ -50,6 +50,8 @@ function sortTable() {
     let bewertungA = parseInt(rowA.cells[1].innerText);
     let bewertungB = parseInt(rowB.cells[1].innerText);
 
+    console.log(rowsArray);
+
     // Sortiere absteigend
     if (bewertungA > bewertungB) {
       return -1; // rowA soll vor rowB kommen
@@ -65,4 +67,29 @@ function sortTable() {
   for (let i = 0; i < rowsArray.length; i++) {
     tbody.appendChild(rowsArray[i]);
   }
+}
+
+document.getElementById("save").onclick = function () {
+  save();
+};
+
+// die Daten von Tabelle müssen nun als Objekt gespeichert werden und zu Array gespeichrt werden
+// Methode 01
+function save() {
+  const tbody = document.querySelector("tbody");
+  // tbody.rows gibt eine HTMLCollection aller <tr>-Elemente innerhalb des <tbody>-Elements zurück.
+  // Die Methode erstellt ein neues Array und kopiert die Elemente des übergebenen Objekts in dieses Array.
+  const rowsArray = Array.from(tbody.rows);
+
+  // weitere logik
+  const data = rowsArray.map((row) => {
+    return {
+      modul: row.cells[0].innerText,
+      bewertung: parseInt(row.cells[1].innerText),
+    };
+  });
+
+  /* console.log(rowsArray); */
+
+  console.log(data);
 }
