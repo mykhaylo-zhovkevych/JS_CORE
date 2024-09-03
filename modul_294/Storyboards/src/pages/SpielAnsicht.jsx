@@ -79,7 +79,7 @@ function SpielAnsicht() {
     if (questions[category][questionIndex].correct === selectedAnswer) {
       setScore(score + 1);
     }
-
+    
     // this will ende the question wehn it reaches the end
     if (questionIndex < questions[category].length - 1) {
       setQuestionIndex(questionIndex + 1);
@@ -100,7 +100,6 @@ function SpielAnsicht() {
       </div>
     );
   } */
-
 
   return (
     <div className="main-block">
