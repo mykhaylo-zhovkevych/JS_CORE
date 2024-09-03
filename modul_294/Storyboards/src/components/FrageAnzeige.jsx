@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 
 function FrageAnzeige({ question, onAnswer }) {
   return (
@@ -14,3 +14,4 @@ function FrageAnzeige({ question, onAnswer }) {
 }
 
 export default FrageAnzeige;
+ */

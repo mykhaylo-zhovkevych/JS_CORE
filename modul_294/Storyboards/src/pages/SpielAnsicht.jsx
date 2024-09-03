@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Kategorieauswahl from "../components/Kategorieauswahl";
-import FrageAnzeige from "../components/FrageAnzeige";
+/* import FrageAnzeige from "../components/FrageAnzeige"; */
 import Auswertung from "../components/Auswertung";
 
 const questions = {
@@ -79,6 +79,8 @@ function SpielAnsicht() {
     if (questions[category][questionIndex].correct === selectedAnswer) {
       setScore(score + 1);
     }
+
+    // this will ende the question wehn it reaches the end
     if (questionIndex < questions[category].length - 1) {
       setQuestionIndex(questionIndex + 1);
     } else {
@@ -86,19 +88,49 @@ function SpielAnsicht() {
     }
   };
 
+/*   function FrageAnzeige({ question, onAnswer }) {
+    return (
+      <div>
+        <h2>{question.question}</h2>
+        {question.options.map((option, index) => (
+          <button key={index} onClick={() => onAnswer(option)}>
+            {option}
+          </button>
+        ))}
+      </div>
+    );
+  } */
+
+
   return (
     <div className="main-block">
       <h1>Quiz Spiel</h1>
 
+
+      {/* hier wird zuerst die div  */}
       {category === null ? (
+        /* 
+        Wenn category den Wert null hat, bedeutet dies, dass der Benutzer noch keine Kategorie ausgewählt hat. Daher wird die Kategorieauswahl-Komponente gerendert.
+        Diese Komponente hat eine onCategoryChange-Prop, die auf die Funktion handleCategoryChange verweist. Diese Funktion wird aufgerufen, wenn der Benutzer eine Kategorie auswählt, um die category-State zu aktualisieren und das Quiz zu starten.
+        */
         <Kategorieauswahl onCategoryChange={handleCategoryChange} />
       ) : completed ? (
+        // Wenn completed true ist, bedeutet dies, dass das Quiz abgeschlossen ist. Daher wird die Auswertung-Komponente gerendert.
+        // Diese Komponente erhält score und total als Props, um die Ergebnisse des Quiz anzuzeigen.
         <Auswertung score={score} total={questions[category].length} />
       ) : (
-        <FrageAnzeige
-          question={questions[category][questionIndex]}
-          onAnswer={handleAnswer}
-        />
+        <div> 
+          {/* renderet die Frage abssiered aud dem user Auswahl */}
+           <h2>{questions[category][questionIndex].question}</h2>
+           {/* mit hilfe von map wird jedes Element von Array von options iteriert */}
+           {questions[category][questionIndex].options.map((option) =>
+           // für jede option von options Array wird eine button erstellt 
+           // die button inhalt wir zu dem handelAnswer Funktionen über gegeben
+            <button onClick={() => handleAnswer(option)}>
+            {option}
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
