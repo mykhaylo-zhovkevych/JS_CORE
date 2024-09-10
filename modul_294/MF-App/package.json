@@ -1,5 +1,5 @@
 {
-  "name": "testprojekt",
+  "name": "mf-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,9 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "mf-app": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "testprojekt": "file:"
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
