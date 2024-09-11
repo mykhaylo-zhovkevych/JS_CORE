@@ -7,8 +7,8 @@ function Board() {
             <aside className="sidebar">
                 <nav>
                     {/* Avatar und Name */}
-                    <div style={{display: "flex", alignItems: "center"}}>
-                        <img src="logo.png" alt="404" className="avatar"/>
+                    <div style={{}}>
+                        <h4>Welcome</h4>
                         <span>User Admin: Mykhaylo</span>
                     </div>
 

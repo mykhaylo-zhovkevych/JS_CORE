@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /* Container für das gesamte Dashboard */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 gleich große Spalten */
+    gap: 20px; /* Abstand zwischen den Spalten */
+    padding: 20px;
+  }
+  
+  /* Jede Spalte (To Do, In Progress, Done) */
+  .column {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .column h2 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+  
+  /* Die Tickets innerhalb der Spalten */
+  .ticket {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  /* Hover-Effekt für die Tickets */
+  .ticket:hover {
+    transform: scale(1.05);
+  }
+  .inprogress {
+    text-align: end;
+  }
+  
+</style>
+<body>
+    <div class="dashboard">
+        <div class="column">
+          <h2>To Do</h2>
+          <div class="ticket">Task 1: To Do</div>
+          <div class="ticket">Task 2: To Do
+            <br>
+            <button>open task</button>
+          </div>
+        </div>
+      
+        <div class="column">
+          <h2>In Progress</h2>
+          <div class="ticket">Task 3: In Progress</div>
+          <div class="ticket">Task 4: In Progress</div>
+          <div class="inprogress">
+            <br>
+            <button>add</button><button>delete</button>
+         </div>
+        </div>
+      
+        <div class="column">
+          <h2>Done</h2>
+           
+            <div class="inprogress">
+            <br>
+            <button>add</button><button>delete</button>
+         </div>
+        </div>
+
+
+      </div>
+
+   
+      
+</body>
+</html>
