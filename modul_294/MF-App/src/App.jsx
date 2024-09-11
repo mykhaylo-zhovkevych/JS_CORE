@@ -1,20 +1,15 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Board from './components/Board';
-
-import './App.css'
+import { BrowserRouter } from "react-router-dom";
+import Header from "./components/Header";
+import AppRoutes from "./dao/AppRoutes"; 
+import "./App.css";
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Board />
-      <Routes>
-    
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   );
 }
 
-export default App
+export default App;
