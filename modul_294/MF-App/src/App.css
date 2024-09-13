@@ -12,9 +12,9 @@ body {
 
 header {
   background-color: #afafaf;
-  width: 100%;
   padding: 2rem;
   border-radius: 25px;
+  margin: 0.5rem;
 }
 
 .container {
@@ -29,12 +29,14 @@ aside {
   background-color: #bfc0c4;
   padding: 1rem;
   border-radius: 25px;
+  margin: 0.5rem;
 }
 
 main {
   padding: 1rem;
   border-radius: 25px;
   background-color: rgb(211, 211, 211);
+  margin: 0.5rem;
 }
 
 .horizontal-links {
