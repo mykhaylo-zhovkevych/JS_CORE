@@ -27,6 +27,10 @@ function Board() {
             </aside>
 
             <main className="board">
+                <section>
+                <h1>Wilkommen auf unsere Seite</h1> 
+                <div>Hier kannst du Fragen stellen und die von anderen sehen</div>
+                </section>
                 <Outlet />
             </main>
         </div>

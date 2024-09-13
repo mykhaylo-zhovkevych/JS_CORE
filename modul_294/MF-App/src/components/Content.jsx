@@ -1,53 +1,82 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-function Content({title,description,assignedTo}) {
+function Content({}) {
+
+    const [tasks, setTasks] = useState([]);
+    const [currentColumn, setCurrentColumn] = useState('To Do');
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+          try {
+            const response = await fetch('http://localhost:8080/{projektarbeits}/documents');
+            const data = await response.json();
+            setTasks(data);
+          } catch (error) {
+            console.error('Error fetching tasks:', error);
+          }
+        };
+      
+        fetchTasks();
+      }, []);
+
+      const addTask = async (task) => {
+        try {
+            const response = await fetch('http://localhost:8080/{projektarbeits}/documents', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: task })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Error adding task');
+            }
+    
+            const newTask = await response.json();
+            setTasks([...tasks, newTask]);
+        } catch (error) {
+            console.error('Error adding task:', error);
+        }
+    };
+
+
     return ( 
-
         <>
-        
-        <div className='preHeader'> 
-            <h4>This is the Kanban Tickets Board, where your issues and wished can be hanged and procesed</h4>
-        </div>
-            
             <div className="dashboard">
-
-                <div className="column">
-                    <h2>To Do</h2>
-                    <div className="ticket">Task 1: To Do</div>
-                    <div className="ticket">Task 2: To Do
-                        <button>open task</button>
+            <div className="column">
+                <h2>To Do</h2>
+                {tasks.filter((task) => task.content && task.content.title && task.content.status === 'To Do').map((task) => (
+                    <div className="ticket" key={task._id}>
+                        <h3>{task.content.title || 'No Title'}</h3>
+                        <p>{task.content.text || 'No Description'}</p>
+                        <button onClick={() => deleteTask(task._id)}>Delete</button>
                     </div>
-                    <div className="inprogress">
-
-                        <button>add</button><button>delete</button>
-                    </div>
-                </div>
-
-                <div className="column">
-                    <h2>In Progress</h2>
-                    <div className="ticket">Task 3: In Progress</div>
-                    <div className="ticket">Task 4: In Progress</div>
-                    <div className="inprogress">
-
-                        <button>add</button><button>delete</button>
-                    </div>
-
-                </div>
-
-                <div className="column">
-                    <h2>Done</h2>
-
-                    <div className="inprogress">
-
-                        <button>add</button><button>delete</button>
-                    </div>
-                </div>
-
-
+                ))}
+                <button onClick={() => addTask({ title: 'Hallo', text: '', status: 'To Do' })}>Add</button>
             </div>
-            
-            </>
 
+            <div className="column">
+                <h2>In Progress</h2>
+                {tasks.filter((task) => task.content && task.content.status === 'In Progress').map((task) => (
+                    <div className="ticket" key={task._id}>
+                        <h3>{task.content.title || 'No Title'}</h3>
+                        <p>{task.content.text || 'No Description'}</p>
+                    </div>
+                ))}
+                <button onClick={() => addTask({ title: 'Neue Aufgabe', text: '', status: 'In Progress' })}>Add</button>
+            </div>
+
+            <div className="column">
+                <h2>Done</h2>
+                {tasks.filter((task) => task.content && task.content.status === 'Done').map((task) => (
+                    <div className="ticket" key={task._id}>
+                        <h3>{task.content.title || 'No Title'}</h3>
+                        <p>{task.content.text || 'No Description'}</p>
+                    </div>
+                ))}
+                <button onClick={() => addTask({ title: 'Neue Aufgabe', text: '', status: 'Done' })}>Add</button>
+            </div>
+            </div>
+        </>
     );
 }
 
