@@ -3,7 +3,6 @@
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
-
 }
 
 body {
@@ -11,32 +10,30 @@ body {
 }
 
 header {
-  background-color: #afafaf;
+  background-color: Silver;
   padding: 2rem;
   border-radius: 25px;
-  margin: 0.5rem;
+  margin: 0.5rem 0.5rem 0.25rem 0.5rem;
 }
 
 .container {
-
   display: grid;
   grid-template-columns: 200px 1fr;
   height: 100vh;
-
 }
 
 aside {
-  background-color: #bfc0c4;
+  background-color: silver;
   padding: 1rem;
   border-radius: 25px;
-  margin: 0.5rem;
+  margin: 0.25rem 0.25rem 0.5rem 0.5rem;
 }
 
 main {
   padding: 1rem;
   border-radius: 25px;
-  background-color: rgb(211, 211, 211);
-  margin: 0.5rem;
+  background-color: Gainsboro;
+  margin: 0.25rem 0.5rem 0.5rem 0.25rem;
 }
 
 .horizontal-links {
@@ -46,7 +43,6 @@ main {
 
 a {
   padding: 10px;
-
 }
 
 /* Content start */
@@ -64,7 +60,6 @@ a {
   padding: 20px;
 }
 
-
 /* Jede Spalte (To Do, In Progress, Done) */
 .column {
   background-color: #f4f4f4;
@@ -79,7 +74,6 @@ a {
   margin-bottom: 15px;
 }
 
-
 .ticket {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -89,7 +83,6 @@ a {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
-
 
 .ticket:hover {
   transform: scale(1.05);
@@ -165,7 +158,6 @@ a {
 
 /* SupportIssues end*/
 
-
 /* User */
 .user-management {
   display: flex;
@@ -237,7 +229,6 @@ a {
 
 /* User end*/
 
-
 /* HomePage */
 .home-page {
   display: flex;
@@ -305,3 +296,141 @@ a {
 }
 
 /* HomePage end */
+
+/* Popup-Fenster */
+.column button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.column button:hover {
+  background-color: #0056b3;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.popup-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.popup-content input,
+.popup-content textarea,
+.popup-content select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.popup-content button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s;
+}
+
+.popup-content button:hover {
+  background-color: #0056b3;
+}
+
+.popup-content .cancel-button {
+  background-color: #dc3545;
+}
+
+.popup-content .cancel-button:hover {
+  background-color: #c82333;
+}
+
+/* Popup-Fenster end */
+
+/* Board */
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: auto;
+  color: #000000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h4 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.sidebar span {
+  font-size: 14px;
+  color: #000000;
+  font-weight: bold;
+}
+
+.horizontal-links {
+  margin-top: 20px;
+}
+
+.horizontal-links a {
+  display: block;
+  background-color: WhiteSmoke;
+  color: #000000;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.horizontal-links a:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+.horizontal-links a.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.board {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Board end */

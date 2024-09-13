@@ -1,5 +1,3 @@
-import React from 'react';
-
 function SupportIssues () {
     return (
         <div className="support-issues">
@@ -11,7 +9,7 @@ function SupportIssues () {
                 <li>3. Noch ein Schritt</li>
                 <li>4. Abschließender Schritt</li>
             </ol>
-            <div className="support">Für weitere Fragen oder Probleme können Sie entweder Florian Huber oder Mykhaylo Zhovkevych fragen.</div>
+            <div className="support">Für weitere Fragen oder Probleme können Sie entweder Mykhaylo Zhovkevych oder Florian Huber fragen.</div>
             <h3 className="support-headline"><b>Impressum:</b></h3>
             <div className="support">MF GmbH</div>
             <div className="support">Oberer Graben 26</div>

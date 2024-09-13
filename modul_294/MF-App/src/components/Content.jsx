@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 /* 
-
-
 
 Ich verwende die Popups um die Daten, dier der benutzer eingint zu verwalten und weiterführen 
 mit Event-Handler werde ich die Öffung und Scliesung Operationen handelen
 
-
 */
-
-
 
 function Content() {
     const [tasks, setTasks] = useState([]);
