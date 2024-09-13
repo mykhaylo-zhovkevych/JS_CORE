@@ -17,7 +17,8 @@ function Board() {
 
                     {/* Horizontale Links */}
                     <div className="horizontal-links">
-                        <Link to="/">Home Page</Link>
+
+                        <Link to="/hp">Home Page</Link>
                         <Link to="/content">Agile Board</Link>
                         <Link to="/user">User</Link>
                         <Link to="/statistic">Statistic</Link>
@@ -27,10 +28,6 @@ function Board() {
             </aside>
 
             <main className="board">
-                <section>
-                <h1>Wilkommen auf unsere Seite</h1> 
-                <div>Hier kannst du Fragen stellen und die von anderen sehen</div>
-                </section>
                 <Outlet />
             </main>
         </div>

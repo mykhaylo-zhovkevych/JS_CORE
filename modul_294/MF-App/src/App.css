@@ -79,7 +79,7 @@ a {
   margin-bottom: 15px;
 }
 
-/* Die Tickets innerhalb der Spalten */
+
 .ticket {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -90,7 +90,7 @@ a {
   transition: transform 0.3s ease;
 }
 
-/* Hover-Effekt für die Tickets */
+
 .ticket:hover {
   transform: scale(1.05);
 }
@@ -100,27 +100,208 @@ a {
 
 /* Content end */
 
-/* Support start*/
+/* SupportIssues start*/
 
-.Support {
-  background-color: #ddd;
-  font-family: Arial, Helvetica, sans-serif;
+.support-issues {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  height: 50vh;
+  font-family: Arial, sans-serif;
 }
 
-.Supportheadline h1{
-  font-size: 1.5em;
-  font-family: Arial, Helvetica, sans-serif;
+.support-issues h1,
+.support-issues h2,
+.support-issues h3 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
-.Supportheadline h2, h3{
-  font-size: 1.3em;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-top: 10px;
+.support-issues h1 {
+  font-size: 2rem;
+  font-weight: bold;
 }
 
-.Supportlist{
-  font-family: Arial, Helvetica, sans-serif;
+.support-issues h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.support-issues h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.support-issues .support-list {
+  list-style-type: decimal;
+  margin: 20px 0;
+  padding-left: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.support-issues .support-list div {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.support-issues .support {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+}
+
+.support-issues img {
+  margin: 20px 0;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* SupportIssues end*/
+
+
+/* User */
+.user-management {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  padding: 20px;
+}
+
+.user-management h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container label {
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.form-container input,
+.form-container select {
+  width: 100%;
+  padding: 8px;
   margin-top: 5px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-/* Support end*/
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-group button:hover {
+  opacity: 0.8;
+}
+
+.button-group button:first-child {
+  background-color: #007bff;
+  color: white;
+}
+
+.button-group button:last-child {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* User end*/
+
+
+/* HomePage */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.welcome-container {
+  text-align: center;
+  max-width: 800px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.home-page h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.home-page p {
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.intro {
+  margin: 20px 0;
+}
+
+.intro h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.intro p {
+  font-size: 1.15rem;
+  color: #555;
+}
+
+.action-buttons {
+  margin-top: 20px;
+}
+
+.action-buttons button {
+  font-size: 1rem;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.action-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* HomePage end */
