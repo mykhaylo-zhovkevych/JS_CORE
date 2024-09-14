@@ -91,6 +91,13 @@ a {
   text-align: end;
 }
 
+.two-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+
 /* Content end */
 
 /* SupportIssues start*/
