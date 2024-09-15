@@ -1,3 +1,4 @@
+import mapImage from '../assets/map.png';
 function SupportIssues() {
   return (
     <div className="support-issues">
@@ -9,7 +10,7 @@ function SupportIssues() {
         <li>1. Schritt zur Erstellung eines Tags</li>
         <li>2. Weiterer Schritt</li>
         <li>3. Noch ein Schritt</li>
-        <li>4. Abschließender Schritt</li>
+        <li>4. Abschliessender Schritt</li>
       </ol>
       <div className="support">
         Für weitere Fragen oder Probleme können Sie entweder Mykhaylo Zhovkevych
@@ -20,7 +21,7 @@ function SupportIssues() {
       </h3>
       <div className="support">MF GmbH</div>
       <div className="support">Oberer Graben 26</div>
-      <img src="/Karte.jpg" alt="Map" />
+      <img src={mapImage} alt="404 Map" />
       <div className="support">9000 St.Gallen</div>
     </div>
   );

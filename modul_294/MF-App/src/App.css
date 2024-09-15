@@ -108,7 +108,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  height: 50vh;
+  height: 80vh;
   font-family: Arial, sans-serif;
 }
 
@@ -160,7 +160,7 @@ a {
   margin: 20px 0;
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 30px;
 }
 
 /* SupportIssues end*/
@@ -463,3 +463,100 @@ a {
 }
 
 /* Statistic end */
+
+.search-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.filter-container {
+  background-color: white;
+  padding: 2rem;
+  margin: 1rem 0rem 1rem 0rem;
+  border-radius: 30px;
+  border: 1px solid silver;
+}
+
+.user-results {
+  margin-bottom: 1rem;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 30px;
+  border: 1px solid silver;
+  
+}
+
+.user-results ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-results li {
+  padding: 5px 0;
+}
+
+/* CreateUser  */
+.create-user {
+  padding: 2rem;
+  border: 1px solid silver;
+  border-radius: 4px;
+  background-color: white;
+  margin-top: 20px;
+  border-radius: 30px;
+}
+
+
+input,
+select {
+  padding: 5px;
+  border: 1px solid silver;
+  border-radius: 4px;
+}
+
+.create-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+/* CreateUser end */
+
+
+
+
+
+
+
+
+
+
