@@ -89,11 +89,6 @@ function Content() {
   };
   
 
-
-
-
-
-
   const addTask = async (task) => {
     try {
       const response = await fetch(
@@ -104,7 +99,7 @@ function Content() {
           body: JSON.stringify({ content: task }),
         }
       );
-
+            
       if (!response.ok) {
         throw new Error("Error adding task");
       }
@@ -117,6 +112,7 @@ function Content() {
     }
   };
 
+  
   const deleteTask = async (taskId) => {
     try {
       const response = await fetch(
@@ -129,9 +125,8 @@ function Content() {
 
       if (response.ok) {
         const updatedTasks = tasks.filter((task) => task.id !== taskId);
-        console.log("Task deleted successfully");
-
         setTasks(updatedTasks);
+        console.log("Task deleted successfully");
       } else {
         throw new Error("Error deleting task");
       }
@@ -140,47 +135,52 @@ function Content() {
     }
   };
 
+  
   /* Snippet für Verwaltung popups und Edit Funktion */
   const handlePopupSubmit = () => {
-    /* Snippet für error checking und rendering */
+    // Überprüfung auf Fehler (z. B. Titel zu lang)
     if (popupData.title.length > maxTitleLength) {
       setErrorMessage(`Der Titel darf ${maxTitleLength} Zeichen nicht überschreiten.`);
       return;
     }
     setErrorMessage("");
-
+  
     if (selectedTaskId) {
-      const updatedTask = { ...popupData };
+      const updatedTask = { 
+        id: selectedTaskId,
+        content: { 
+          title: popupData.title, 
+          text: popupData.text, 
+          status: popupData.status 
+        }
+      };
+  
       fetch(`http://localhost:8080/projektarbeits/documents/${selectedTaskId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: updatedTask }),
+        body: JSON.stringify(updatedTask),
       })
         .then((response) => response.json())
         .then((data) => {
+          // Aktualisiere die Aufgabenliste im State
           const updatedTasks = tasks.map((task) =>
             task.id === selectedTaskId
-              ? { ...task, content: updatedTask }
+              ? { ...task, content: updatedTask.content } 
               : task
           );
           setTasks(updatedTasks);
         })
         .catch((error) => console.error("Error updating task:", error));
     } else {
+      // Füge neuen Task hinzu, wenn keine ID ausgewählt ist
       addTask(popupData);
     }
-
+  
+    // Popup zurücksetzen
     setShowPopup(false);
     setPopupData({ title: "", text: "", status: "", assignedUsers: [] });
     setSelectedTaskId(null);
   };
-
-
-
-
-
-
-
 
   /* Snippet für User Zuwesiung und Filtering */
   const handleAssignUsers = async (taskId, userIds) => {
