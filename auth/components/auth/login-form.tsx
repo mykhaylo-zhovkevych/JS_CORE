@@ -43,8 +43,7 @@ export const LoginForm = () => {
             login(values)
                 .then((data) => {
                     setError(data?.error);
-                    // TODO when 2FA added
-                  /*   setSuccess(data?.success); */
+                    setSuccess(data?.success);
                 })
         });
         // axios.post("/route/api", values)

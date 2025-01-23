@@ -24,11 +24,30 @@ export const {
             }
         },
         callbacks: {
-        async signIn({ user }) {
-            console.log("🔍 signIn - user:", user); // Hier siehst du, was in `user` steckt
+        async signIn({user, account}) {
+
+            console.log({
+                user, account,
+            });
+
+            // Allow OAuth without email verification
+            if (account?.provider !== "credentials") return true;
+
+            // Prevent sign in without email verification
+            const existingUser = await getUserById(user.id);
+
+            if (!existingUser?.emailVerified) return false;
+
+            // TODO: Add 2FA check
+
+
+            return true
+        },
+        /* async signIn({ user }) {
+            console.log("🔍 signIn - user:", user);
 
             return true;
-        },
+        }, */
         async session({ token, session }) {
           /*   console.log({
                 sessionToken: token,
