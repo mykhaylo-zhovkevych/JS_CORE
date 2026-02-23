@@ -1,0 +1,149 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #111;
+  background: #f6f6f7;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.95em;
+}
+
+.app {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.topbar {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: white;
+  border: 1px solid #e7e7ea;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.muted {
+  color: #666;
+  margin: 6px 0 0 0;
+  line-height: 1.4;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  border: 1px solid #dedee3;
+  background: #fafafa;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tab.active {
+  background: #111;
+  color: white;
+  border-color: #111;
+}
+
+.content {
+  margin-top: 14px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e7e7ea;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+h3 {
+  margin: 16px 0 8px;
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 12px;
+}
+
+.panel {
+  border: 1px solid #ededf1;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fbfbfc;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 10px;
+}
+
+button, input {
+  font: inherit;
+}
+
+.btn {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #dedee3;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: #111;
+  color: white;
+  border-color: #111;
+}
+
+.btn.danger {
+  background: #b00020;
+  color: white;
+  border-color: #b00020;
+}
+
+input[type="text"], input[type="number"] {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #dedee3;
+  min-width: 180px;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 6px 10px;
+  margin-top: 10px;
+}
