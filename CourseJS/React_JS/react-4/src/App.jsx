@@ -3,12 +3,13 @@ import './App.css'
 import UseStateDemo from "./demos/UseStateDemo.jsx";
 import UseEffectDemo from "./demos/UseEffectDemo.jsx";
 import UseRefDemo from "./demos/UseRefDemo.jsx";
+import CompositionVsInheritance from "./demos/CompositionVsInheritance.jsx";
 
 const TABS = [
   {id: "state", label: "useState",view: <UseStateDemo  />},
   {id: "effect", label: "useEffect", view: <UseEffectDemo />},
   {id: "ref", label: "useRef", view: <UseRefDemo />},
-  // {id: "composition", label: "CompositionVsInheritance", view: <CompositionVsInheritance />},
+  {id: "composition", label: "CompositionVsInheritance", view: <CompositionVsInheritance />},
 ];
 
 
