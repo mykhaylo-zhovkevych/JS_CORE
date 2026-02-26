@@ -25,7 +25,7 @@ taskInput.addEventListener('keydown', (e) => {
 
 clearCompletedBth.addEventListener('click', clearCompleted);
 
-// the white space will be pushed
+// If white-space prevent from the process
 function addTodo(text) {
     if (text.trim() === '') return;
 
