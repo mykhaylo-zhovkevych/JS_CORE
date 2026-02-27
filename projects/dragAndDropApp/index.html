@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Drag and Drop App</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>
+                Simple Kanban Board
+            </h1>
+
+            <div class="board">
+                <!-- List 1-->
+                <div class="list" id="list1">
+                    <h3>To Do</h3>
+                    <div class="card" draggable="true" id="card1">
+                        Wash Dishes
+                    </div>
+                    <div class="card" draggable="true" id="card2">
+                        Walk the Dog
+                    </div>
+                </div>
+
+                <!-- List 2-->
+                <div class="list" id="list2">
+                    <h3>In Progress</h3>
+                    <div class="card" draggable="true" id="card3">
+                        Learn Kanban
+                    </div>
+                </div>
+
+                <!-- List 3-->
+                <div class="list" id="list3">
+                    <h3>Done</h3>
+   
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="./script.js"></script>
+</html>
