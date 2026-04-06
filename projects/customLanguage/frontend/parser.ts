@@ -1,5 +1,5 @@
 // It takes the tokens from the lexer and understands their structure (meaning)
-import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier } from "./ast.js";
+import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration } from "./ast.js";
 import { tokenize, TokenType, type Token } from "./lexer.js";
 
 export default class Parser {
@@ -48,7 +48,43 @@ export default class Parser {
 
     private parse_stmt(): Stmt {
         // skip to parse_expr
-        return this.parse_expr();
+        switch (this.at().type) {
+            case TokenType.Let:
+            case TokenType.Const:
+                return this.parse_var_declaration();
+            default:
+                return this.parse_expr();
+        }
+    }
+
+    // LET indet;
+    // (CONST | LET) Identifier = expr;
+    private parse_var_declaration(): Stmt {
+        // If curent token is a const after advancing  
+        const isConstant = this.eat().type == TokenType.Const;
+        const identifier = this.expect(TokenType.Identifier, 
+            "Expected indetifier name following let | const keywords").value;
+
+        if (this.at().type == TokenType.Semicolon) {
+            this.eat(); // eat the semicolon
+            if (isConstant){
+                throw "Must assign a value to a constant expression. No value provided.";
+            }
+            return { kind: "VarDeclaration", identifier, constant: false } as VarDeclaration;
+        }
+
+        this.expect(TokenType.Equals, "Expected equals token following identifier in variable declaration");
+        const expr = this.parse_expr();
+        this.expect(TokenType.Semicolon, "Expected semicolon following variable declaration");
+
+        const declaration = {
+            kind: "VarDeclaration",
+            identifier,
+            value: expr,
+            constant: isConstant,
+        } as VarDeclaration;
+        
+        return declaration;
     }
 
     private parse_expr(): Expr {
