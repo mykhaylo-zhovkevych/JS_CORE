@@ -1,5 +1,5 @@
 // It takes the tokens from the lexer and understands their structure (meaning)
-import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, NullLiteral } from "./ast.js";
+import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier } from "./ast.js";
 import { tokenize, TokenType, type Token } from "./lexer.js";
 
 export default class Parser {
@@ -107,10 +107,6 @@ export default class Parser {
         switch (tk) {
             case TokenType.Identifier:
                 return { kind : "Identifier", symbol: this.eat().value } as Identifier;
-
-            case TokenType.Null:
-                this.eat(); // advance past null keyword
-                return { kind: "NullLiteral", value: "null" } as NullLiteral;
 
             case TokenType.Number: 
                 return { kind: "NumericLiteral", value: parseFloat(this.eat().value) } as NumericLiteral;

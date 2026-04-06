@@ -5,19 +5,23 @@
 
 
 export enum TokenType {
-    Null,
+    // Literal Types
     Number,
     Identifier,
+    String,
+
     Equals,
     OpenParen, CloseParen,
     BinaryOperator,
+
+    // Keywords
     Let,
+
     EOF // signifies end of file
 }
 
 const KEYWORD: Record<string, TokenType> = {
     "let": TokenType.Let,
-    "null": TokenType.Null,
 }
  
 export interface Token {

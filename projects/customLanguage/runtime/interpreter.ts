@@ -1,7 +1,8 @@
 // The interpreter walks through this structure and performs actions:
 
-import type { ValueType, RuntimeValue, NumberValue, NullValue} from "./values.js";
-import type { BinaryExpr, NodeType, NumericLiteral, Program, Stmt} from "../frontend/ast.js";
+import {type RuntimeValue, type NumberValue, MK_NULL} from "./values.js";
+import type { BinaryExpr, Identifier, NumericLiteral, Program, Stmt} from "../frontend/ast.js";
+import type Environment from "./environmnet.js";
 
 
 function evaluate_numeric_expr (leftHandSide: NumberValue, rightHandSide: NumberValue, operator: string): NumberValue {
@@ -32,34 +33,39 @@ function evaluate_numeric_expr (leftHandSide: NumberValue, rightHandSide: Number
     }
 } 
 
-function evaluate_binary_expr (binop: BinaryExpr): RuntimeValue {
+function evaluate_binary_expr (binop: BinaryExpr, env: Environment): RuntimeValue {
 
-    const leftHandSide = evaluate(binop.left);
-    const rightHandSide = evaluate(binop.right);
+    const leftHandSide = evaluate(binop.left, env);
+    const rightHandSide = evaluate(binop.right, env);
 
     if (leftHandSide.type == "number" && rightHandSide.type == "number") {
-        return evaluate_numeric_expr(leftHandSide as NumberValue, rightHandSide as NumberValue, binop.operator);
+        return evaluate_numeric_expr(
+            leftHandSide as NumberValue, 
+            rightHandSide as NumberValue, 
+            binop.operator
+        );
 
     } else {
-        return {
-            type: "null",
-            value: "null",
-        } as NullValue;
+        return MK_NULL();
     }
 }
 
 
-function evaluate_program (program: Program): RuntimeValue {
-    let lastEvaluated: RuntimeValue = { type: "null", value: "null" } as NullValue;
-
+function evaluate_program (program: Program, env: Environment): RuntimeValue {
+    let lastEvaluated: RuntimeValue = MK_NULL();
     for (const statement of program.body) {
-        lastEvaluated = evaluate(statement);
+        lastEvaluated = evaluate(statement, env);
     }
-
     return lastEvaluated;
 }
 
-export function evaluate (astNode: Stmt): RuntimeValue {
+function evaluate_identifier (ident: Identifier, env: Environment): RuntimeValue {
+    const val = env.lookupVar(ident.symbol);
+    return val;
+}
+
+
+export function evaluate (astNode: Stmt, env: Environment): RuntimeValue {
     switch (astNode.kind) {
         case "NumericLiteral":
             return {
@@ -67,17 +73,14 @@ export function evaluate (astNode: Stmt): RuntimeValue {
                 type: "number",
             } as NumberValue;
 
-        case "NullLiteral":
-            return {
-                value: "null",
-                type: "null"
-            } as NullValue;
+        case "Identifier":
+            return evaluate_identifier(astNode as Identifier, env);
 
         case "BinaryExpression":
-            return evaluate_binary_expr(astNode as BinaryExpr);
+            return evaluate_binary_expr(astNode as BinaryExpr, env);
         
         case "Program":
-            return evaluate_program(astNode as Program);
+            return evaluate_program(astNode as Program, env);
 
         default:
             throw new Error(`Interpreter Error: Unsupported AST Node Type: ${astNode.kind}`);
