@@ -2,7 +2,7 @@ import Parser from "./frontend/parser.js";
 import { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { evaluate } from "./runtime/interpreter.js";
-import Environment from "./runtime/environmnet.js";
+import Environment, { createGlobalEnv } from "./runtime/environmnet.js";
 import { MK_BOOL, MK_NULL } from "./runtime/values.js";
 
 
@@ -10,12 +10,7 @@ repl();
 
 async function repl () {
     const parser = new Parser();
-    const env = new Environment();
-
-    env.declareVar("true", MK_BOOL(true));
-    env.declareVar("false", MK_BOOL(false));
-    env.declareVar("null", MK_NULL());
-
+    const env = createGlobalEnv();
 
     const rl = createInterface({ input, output });
 

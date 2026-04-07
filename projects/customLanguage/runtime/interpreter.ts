@@ -1,12 +1,10 @@
 // The interpreter walks through this structure and performs actions:
 
 import {type RuntimeValue, type NumberValue, MK_NULL} from "./values.js";
-import type { BinaryExpr, Identifier, NumericLiteral, Program, Stmt, VarDeclaration } from "../frontend/ast.js";
+import type { AssignmentExpression, BinaryExpr, Identifier, NumericLiteral, Program, Stmt, VarDeclaration } from "../frontend/ast.js";
 import type Environment from "./environmnet.js";
-import { evaluate_binary_expr, evaluate_identifier } from "./eval/expressions.js";
+import { evaluate_assignment, evaluate_binary_expr, evaluate_identifier, evaluate_object_expr } from "./eval/expressions.js";
 import { evaluate_program, evaluate_var_declaration } from "./eval/statements.js";
-
-
 
 
 export function evaluate (astNode: Stmt, env: Environment): RuntimeValue {
@@ -20,8 +18,14 @@ export function evaluate (astNode: Stmt, env: Environment): RuntimeValue {
         case "Identifier":
             return evaluate_identifier(astNode as Identifier, env);
 
+        case "ObjectLiteral":
+            return evaluate_object_expr(astNode as any, env);
+
         case "BinaryExpression":
             return evaluate_binary_expr(astNode as BinaryExpr, env);
+
+        case "AssignmentExpression":
+            return evaluate_assignment(astNode as AssignmentExpression, env);
 
         case "VarDeclaration":
             return evaluate_var_declaration(astNode as VarDeclaration, env);

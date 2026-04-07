@@ -11,8 +11,10 @@ export enum TokenType {
     String,
 
     Equals,
+    Comma, Colon, // :
     Semicolon,
-    OpenParen, CloseParen,
+    OpenParen, CloseParen,// ()
+    OpenBrace, CloseBrace,// {}
     BinaryOperator,
 
     // Keywords
@@ -41,7 +43,7 @@ function isalpha (src: string) {
 } 
 
 function isskippable (str: string) {
-    return str == ' ' || str == '\n' || str == '\t';
+    return str == ' ' || str == '\n' || str == '\t' || str == '\r';
 }
 
 function isint (src: string) {
@@ -66,7 +68,16 @@ export function tokenize(sourceCode: string): Token[] {
             tokens.push(token(src.shift()!, TokenType.OpenParen));
         } else if (current == ')') {
             tokens.push(token(src.shift()!, TokenType.CloseParen));
-        } else if (current == '+' || current == '-' || current == '*' || current == '/' || current == '%') {
+        } 
+        else if (current == '{') {
+            tokens.push(token(src.shift()!, TokenType.OpenBrace));
+        }
+        else if (current == '}') {
+            tokens.push(token(src.shift()!, TokenType.CloseBrace));
+        } else if (current == ')') {
+            tokens.push(token(src.shift()!, TokenType.CloseParen));
+        }
+        else if (current == '+' || current == '-' || current == '*' || current == '/' || current == '%') {
             tokens.push(token(src.shift()!, TokenType.BinaryOperator));
         }
         else if (current == '=') {
@@ -74,7 +85,12 @@ export function tokenize(sourceCode: string): Token[] {
         } 
         else if (current == ';') {
             tokens.push(token(src.shift()!, TokenType.Semicolon));
-
+        }
+        else if (current == ':') {
+            tokens.push(token(src.shift()!, TokenType.Colon));
+        }
+        else if (current == ',') {
+            tokens.push(token(src.shift()!, TokenType.Comma));
         }
         else {
             // handles multi character tokes

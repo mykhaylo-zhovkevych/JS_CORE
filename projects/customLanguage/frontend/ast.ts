@@ -5,12 +5,17 @@ export type NodeType =
 "VarDeclaration" |
 
 // Expressions
- "NumericLiteral" |
-  "Identifier" |
-   "BinaryExpression" ;
-    // "CallExpr" |
-    //  "UnaryExpr" |
-    //   "FunctionDeclarationn";
+"AssignmentExpression" |
+
+// Literals
+"Property" |
+"ObjectLiteral"|
+"NumericLiteral" |
+"Identifier" |
+"BinaryExpression";
+
+
+
 
 
 // abstract type
@@ -18,10 +23,21 @@ export interface Stmt {
     kind: NodeType;
 }
 
+
+// expected to return some value
+export interface Expr extends Stmt {
+}
+
 export interface Program extends Stmt {
     kind: "Program";
     body: Stmt[];
 }
+export interface AssignmentExpression extends Expr {
+    kind: "AssignmentExpression";
+    assigne: Expr;
+    value: Expr;
+}
+
 
 export interface VarDeclaration extends Stmt {
     kind: "VarDeclaration";
@@ -29,11 +45,6 @@ export interface VarDeclaration extends Stmt {
     identifier: string,
     value?: Expr,
 }
-
-// expected to return some value
-export interface Expr extends Stmt {
-}
-
 export interface BinaryExpr extends Expr{
     kind: "BinaryExpression";
     left: Expr,
@@ -51,3 +62,13 @@ export interface NumericLiteral extends Expr {
     value: number;
 }
 
+export interface Property extends Expr {
+    kind: "Property";
+    key: string;
+    value?: Expr;
+}
+
+export interface ObjectLiteral extends Expr {
+    kind: "ObjectLiteral";
+    properties: Property[];
+}

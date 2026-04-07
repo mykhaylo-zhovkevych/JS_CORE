@@ -1,5 +1,5 @@
 // It takes the tokens from the lexer and understands their structure (meaning)
-import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration } from "./ast.js";
+import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property } from "./ast.js";
 import { tokenize, TokenType, type Token } from "./lexer.js";
 
 export default class Parser {
@@ -88,7 +88,54 @@ export default class Parser {
     }
 
     private parse_expr(): Expr {
-        return this.parse_additive_expr();
+        return this.parse_assignment_expr();
+    }
+
+    private parse_assignment_expr(): Expr { 
+        const left = this.parse_object_expr();
+
+        if (this.at().type == TokenType.Equals) { 
+            this.eat(); // advance past equals token
+            const value = this.parse_assignment_expr(); 
+            return {
+                value, assigne: left, kind: "AssignmentExpression"
+            } as AssignmentExpression;
+        }
+        return left;
+    }
+    
+    private parse_object_expr(): Expr {
+        // If no the object case
+        if (this.at().type !== TokenType.OpenBrace) {
+            return this.parse_additive_expr();
+        }
+        this.eat(); // advance past open brace
+        const properties = new Array<Property>();
+
+        while (this.not_eof() && this.at().type !== TokenType.CloseBrace) {
+            // { key: val, key2: val} | { key }
+            const key = this.expect(TokenType.Identifier, "Expected identifier as object literal key").value;
+
+            // Shorthand property: { key } or { key, ... }
+            if (this.at().type == TokenType.Comma || this.at().type == TokenType.CloseBrace) {
+                properties.push({ key, kind: "Property" } as Property);
+                if (this.at().type == TokenType.Comma) {
+                    this.eat(); // eat comma between properties
+                }
+                continue; // As long as a comma or closing brace follows we can assume it's a shorthand property and continue to the next one
+            }
+
+            // Full property: { key: value }
+            this.expect(TokenType.Colon, "Missing colon following identifier in object expression");
+            const value = this.parse_expr(); // any expression can be the value of the property
+
+            properties.push({ kind: "Property", value, key });
+            if (this.at().type != TokenType.CloseBrace) {
+                this.expect(TokenType.Comma, "Missing comma or clsosing brace in object expression");
+            }
+        }
+        this.expect(TokenType.CloseBrace, "Object literal missing closing brace");
+        return { kind: "ObjectLiteral", properties } as ObjectLiteral;
     }
 
     // (10 + 5) - 5 right hand precedence
