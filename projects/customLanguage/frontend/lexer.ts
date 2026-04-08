@@ -12,9 +12,11 @@ export enum TokenType {
 
     Equals,
     Comma, Colon, // :
+    Dot,
     Semicolon,
     OpenParen, CloseParen,// ()
     OpenBrace, CloseBrace,// {}
+    OpenBracket, CloseBracket, // []
     BinaryOperator,
 
     // Keywords
@@ -76,6 +78,14 @@ export function tokenize(sourceCode: string): Token[] {
             tokens.push(token(src.shift()!, TokenType.CloseBrace));
         } else if (current == ')') {
             tokens.push(token(src.shift()!, TokenType.CloseParen));
+        }
+        else if (current == '[') {
+            tokens.push(token(src.shift()!, TokenType.OpenBracket));
+        } else if (current == ']') {
+            tokens.push(token(src.shift()!, TokenType.CloseBracket));
+        }
+        else if (current == '.') {
+            tokens.push(token(src.shift()!, TokenType.Dot));
         }
         else if (current == '+' || current == '-' || current == '*' || current == '/' || current == '%') {
             tokens.push(token(src.shift()!, TokenType.BinaryOperator));

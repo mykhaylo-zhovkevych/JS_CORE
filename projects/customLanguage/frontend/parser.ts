@@ -1,5 +1,5 @@
 // It takes the tokens from the lexer and understands their structure (meaning)
-import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property } from "./ast.js";
+import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property, CallExpr, MemberExpr } from "./ast.js";
 import { tokenize, TokenType, type Token } from "./lexer.js";
 
 export default class Parser {
@@ -155,15 +155,94 @@ export default class Parser {
         return left;
     }
 
+    // recursive foo.x()
+    private parse_call_member_expr(): Expr {
+        const member = this.parse_member_expr();
+
+        if (this.at().type == TokenType.OpenParen) {
+            return this.parse_call_expr(member);
+        }
+
+        return member;
+
+    }
+
+    private parse_call_expr(callee: Expr): Expr {
+        // parsed 
+        let call_epxr: Expr = {
+            kind: "CallExpression",
+            args: this.parse_args(),
+            callee,
+
+        } as CallExpr;
+        
+        // if a new param is added
+        if (this.at().type == TokenType.OpenParen) {
+            call_epxr = this.parse_call_expr(call_epxr);
+        }
+
+        return call_epxr;
+
+    }
+
+
+    // Helper function 
+    private parse_args(): Expr[] {
+        //this.expect(TokenType.OpenParen, "Expected open parenthesis");
+        const args = this.at().type == TokenType.CloseParen 
+            ? [] 
+            : this.parse_arguments_list();
+
+        this.expect(TokenType.CloseParen, "Missing closing parenthesis");
+        return args;
+    }
+
+    private parse_arguments_list(): Expr[] {
+        const args = [this.parse_assignment_expr()];
+        
+        while (this.at().type == TokenType.Comma && this.eat()) {
+           args.push(this.parse_assignment_expr());
+        }
+        return args;
+    }
+
+    private parse_member_expr(): Expr {
+        let object = this.parse_primary_expr();
+
+        while(this.at().type == TokenType.Dot || this.at().type == TokenType.OpenBracket) {
+            const operator = this.eat();
+            let property: Expr;
+            let computed: boolean; 
+
+            // non computed values 
+            if (operator.type == TokenType.Dot) {
+                computed = false;
+                property = this.parse_primary_expr(); // Identifier 
+                if (property.kind != "Identifier") {
+                    throw `Cannot use dot operator without right hand identifier. Found ${property.kind}`;
+                }
+            } else {
+                computed = true;
+                property = this.parse_expr();
+                this.expect(TokenType.CloseBracket, "Missing clsoing bracket for computed member expression");
+            }
+            object = {
+                kind : "MemberExpression",
+                object, property, computed,
+            } as MemberExpr; // bypasses excess-property complain of Expr
+        }
+        return object;
+    }
+
     private parse_multiplicative_expr(): Expr {
         // it has more precedence than additive expression, so i call it first to get the right hand side of the additive expression
-        let left = this.parse_primary_expr();
+        let left = this.parse_call_member_expr();
 
         // parsing token itself
         while (this.at().value == '/' || this.at().value == '*' || this.at().value == '%') 
         {
             const operator = this.eat().value;
-            const right = this.parse_primary_expr();
+            const right = this.parse_call_member_expr();
             // returns back to the left and start parsing again (while expression)
             left = {
                 kind: "BinaryExpression",
@@ -175,12 +254,11 @@ export default class Parser {
 
     // Orders of Prescidence:
     // AssignmentExpr
-    // FunctionCall
-    // LogicalExpr
-    // ComparisonExpr
+    // ObjectExpr
     // AdditiveExpr
     // MultiplicativeExpr
-    // UnaryExpr
+    // CallExpr
+    // MemberExpr
     // PrimaryExpr
 
 
@@ -207,5 +285,4 @@ export default class Parser {
                 throw new Error(`Unexpected token: ${this.at().value}`);
         }
     }
-
 }

@@ -6,6 +6,8 @@ export type NodeType =
 
 // Expressions
 "AssignmentExpression" |
+"MemberExpression" |
+"CallExpression" |
 
 // Literals
 "Property" |
@@ -45,6 +47,21 @@ export interface VarDeclaration extends Stmt {
     identifier: string,
     value?: Expr,
 }
+export interface MemberExpr extends Expr{
+    kind: "MemberExpression";
+    object: Expr,
+    property: Expr;
+    operator: string; // . or []
+    computed: boolean;
+}
+
+export interface CallExpr extends Expr{
+    kind: "CallExpression";
+    args: Expr[],
+    callee: Expr;
+    
+}
+
 export interface BinaryExpr extends Expr{
     kind: "BinaryExpression";
     left: Expr,
