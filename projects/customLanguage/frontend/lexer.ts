@@ -22,6 +22,7 @@ export enum TokenType {
     // Keywords
     Let,
     Const,
+    Fn,
 
     EOF // signifies end of file
 }
@@ -29,6 +30,7 @@ export enum TokenType {
 const KEYWORD: Record<string, TokenType> = {
     "let": TokenType.Let,
     "const": TokenType.Const,
+    "fn": TokenType.Fn,
 }
  
 export interface Token {

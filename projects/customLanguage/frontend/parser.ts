@@ -1,5 +1,5 @@
 // It takes the tokens from the lexer and understands their structure (meaning)
-import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property, CallExpr, MemberExpr } from "./ast.js";
+import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property, CallExpr, MemberExpr, FunctionDeclaration } from "./ast.js";
 import { tokenize, TokenType, type Token } from "./lexer.js";
 
 export default class Parser {
@@ -52,8 +52,16 @@ export default class Parser {
             case TokenType.Let:
             case TokenType.Const:
                 return this.parse_var_declaration();
-            default:
-                return this.parse_expr();
+            case TokenType.Fn:
+                return this.parse_fn_declaration();
+            default: {
+                const expr = this.parse_expr();
+                // Optional semicolon after expression stmnt
+                if (this.at().type == TokenType.Semicolon) {
+                    this.eat();
+                }
+                return expr;
+            }
         }
     }
 
@@ -87,6 +95,32 @@ export default class Parser {
         return declaration;
     }
 
+    private parse_fn_declaration(): Stmt {
+        this.eat(); // eat the fn 
+        const name = this.expect(TokenType.Identifier, "Expected function name following fn keyword").value;
+
+        const args = this.parse_args();
+        const params: string[] = [];
+        for (const arg of args) {
+            if (arg.kind !== "Identifier") {
+                console.log(arg);
+                throw "Function parameters must be identifiers";
+            }
+            params.push((arg as Identifier).symbol);
+        }
+        this.expect(TokenType.OpenBrace, "Expected function body following declaration");
+        const body: Stmt[] = [];
+
+        while (this.at().type !== TokenType.EOF && this.at().type !== TokenType.CloseBrace) {
+            body.push(this.parse_stmt());
+        }
+        this.expect(TokenType.CloseBrace, "Closing brace expected inside function declaration");
+        const fn = {
+            kind: "FunctionDeclaration", parameters: params, name, body
+        } as FunctionDeclaration;
+        return fn;
+    }
+    
     private parse_expr(): Expr {
         return this.parse_assignment_expr();
     }
@@ -188,7 +222,7 @@ export default class Parser {
 
     // Helper function 
     private parse_args(): Expr[] {
-        //this.expect(TokenType.OpenParen, "Expected open parenthesis");
+        this.expect(TokenType.OpenParen, "Expected open parenthesis");
         const args = this.at().type == TokenType.CloseParen 
             ? [] 
             : this.parse_arguments_list();

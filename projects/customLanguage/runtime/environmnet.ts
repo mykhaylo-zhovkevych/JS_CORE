@@ -1,10 +1,24 @@
-import { MK_BOOL, MK_NULL, type RuntimeValue } from "./values.js";
+import { MK_BOOL, MK_NATIVE_FN, MK_NULL, MK_NUMBER, type RuntimeValue } from "./values.js";
 
 export function createGlobalEnv () {
     const env = new Environment();
     env.declareVar("true", MK_BOOL(true), true);
     env.declareVar("false", MK_BOOL(false), true);
     env.declareVar("null", MK_NULL(), true);
+
+    env.declareVar("print", 
+            MK_NATIVE_FN((args, scope) => {
+                console.log(...args);
+            return MK_NULL();
+            }), 
+        true
+    );
+
+    function timeFunction (args: RuntimeValue[], _env: Environment) {
+        return MK_NUMBER(Date.now());
+    }
+    env.declareVar("time", MK_NATIVE_FN(timeFunction), true);
+
     return env;
 }
 
@@ -60,5 +74,4 @@ export default class Environment {
         // Else go the parent scope
         return this.parent.resolve(varname);
     }
-
 }
