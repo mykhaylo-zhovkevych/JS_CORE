@@ -3,7 +3,6 @@ import { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { evaluate } from "./runtime/interpreter.js";
 import Environment, { createGlobalEnv } from "./runtime/environmnet.js";
-import { MK_BOOL, MK_NULL } from "./runtime/values.js";
 
 
 repl();

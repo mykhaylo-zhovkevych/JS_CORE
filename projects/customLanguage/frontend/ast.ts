@@ -18,9 +18,6 @@ export type NodeType =
 "BinaryExpression";
 
 
-
-
-
 // abstract type
 export interface Stmt {
     kind: NodeType;
@@ -58,7 +55,7 @@ export interface MemberExpr extends Expr{
     kind: "MemberExpression";
     object: Expr,
     property: Expr;
-    operator: string; // . or []
+    operator: "." | "[]";
     computed: boolean;
 }
 

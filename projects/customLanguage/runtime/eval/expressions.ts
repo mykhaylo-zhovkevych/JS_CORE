@@ -1,4 +1,4 @@
-import type { AssignmentExpression, BinaryExpr, CallExpr, Identifier, ObjectLiteral, VarDeclaration } from "../../frontend/ast.js";
+import type { AssignmentExpression, BinaryExpr, CallExpr, Identifier, MemberExpr, ObjectLiteral, VarDeclaration } from "../../frontend/ast.js";
 import Environment from "../environmnet.js";
 import { evaluate } from "../interpreter.js";
 import { MK_NULL, type FunctionValue, type NativeFunctionValue, type NumberValue, type ObjectValue, type RuntimeValue } from "../values.js";
@@ -21,7 +21,9 @@ function evaluate_numeric_expr (leftHandSide: NumberValue, rightHandSide: Number
                 value: leftHandSide.value * rightHandSide.value,
             }
         case "/":
-            // Division by zero check
+            if (leftHandSide.value == 0 || rightHandSide.value == 0) {
+                throw new Error("Division by zero is not allowed.");
+            }
             return {
                 type: "number",
                 value: leftHandSide.value / rightHandSide.value,
@@ -69,6 +71,32 @@ export function evaluate_object_expr (obj: ObjectLiteral, env: Environment): Run
         object.properties.set(key, runtimeVal);
     } 
     return object;
+}
+
+export function evaluate_member_expr (expr: MemberExpr, env: Environment): RuntimeValue {
+    const object = evaluate(expr.object, env);
+
+    if (object.type !== "object") {
+        throw new Error(`Cannot access property on non-object value of type ${object.type}`);
+    }
+
+    let key: string;
+    if (!expr.computed) { // must be dot
+        if (expr.property.kind !== "Identifier") {
+            throw new Error("Dot opeartor requires an identifier on the right hand side");
+        }
+        key = (expr.property as Identifier).symbol;
+    } 
+    else {
+        const propertyValue = evaluate(expr.property, env);
+        if (propertyValue.type === "number") {
+            key = String((propertyValue as NumberValue).value);
+        } else {
+            throw new Error(`Computed property access requires a numeric key, got ${propertyValue.type}`);
+        }
+    }
+
+    return (object as ObjectValue).properties.get(key) ?? MK_NULL();
 }
 
 export function evaluate_call_expr (expr: CallExpr, env: Environment): RuntimeValue {

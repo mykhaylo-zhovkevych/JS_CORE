@@ -1,6 +1,8 @@
 import type { Stmt } from "../frontend/ast.js";
 import Environment from "./environmnet.js";
 export type ValueType = "null" | "number" | "boolean" | "object" | "native-fn" | "function";
+export type FunctionCall = (args: RuntimeValue[], env: Environment) => RuntimeValue;
+
 export interface RuntimeValue {
     type: ValueType;
 }
@@ -25,8 +27,6 @@ export interface ObjectValue extends RuntimeValue {
     properties: Map<string, RuntimeValue>;
 }
 
-export type FunctionCall = (args: RuntimeValue[], env: Environment) => RuntimeValue;
-
 export interface NativeFunctionValue extends RuntimeValue {
     type: "native-fn";
     call: FunctionCall;
@@ -43,7 +43,6 @@ export interface FunctionValue extends RuntimeValue {
 export function MK_NATIVE_FN (call: FunctionCall) {
     return { type: "native-fn", call } as NativeFunctionValue;
 }
-
 
 export function MK_BOOL(n = true) {
     return { type: "boolean", value: n } as BooleanValue;

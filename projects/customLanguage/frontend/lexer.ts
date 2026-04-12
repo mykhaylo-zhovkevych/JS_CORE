@@ -3,7 +3,6 @@
 // let x = 45
 // [LetToken, IdentifierToken, EqualToken, NumberToken]
 
-
 export enum TokenType {
     // Literal Types
     Number,
@@ -67,7 +66,7 @@ export function tokenize(sourceCode: string): Token[] {
             break;
         }
 
-    // continue building tokens undtil end of file
+        // continue building tokens undtil end of file
         if (current == '(') {
             tokens.push(token(src.shift()!, TokenType.OpenParen));
         } else if (current == ')') {
