@@ -288,3 +288,418 @@ Meaning:
 - react only when the clicked target matches `.delete`
 - works also for buttons added later
 
+
+---
+# 5. DOM Manipulation
+
+## 5.1 What DOM manipulation means
+
+The Document Object Model manipulation means reading or changing that structure.
+
+jQuery can:
+- change text
+- change HTML
+- change attributes
+- change CSS classes
+- insert elements
+- remove elements
+- move elements
+
+## 5.2 Changing text and HTML
+
+```js
+$("#title").text("New title");
+$("#content").html("<strong>Important</strong>");
+```
+
+Difference:
+
+| Method    | Meaning             | Safer for user input?           |
+| --------- | ------------------- | ------------------------------- |
+| `.text()` | inserts plain text  | yes                             |
+| `.html()` | inserts HTML markup | dangerous if input is untrusted |
+
+Prefer `.text()` when inserting user input:
+```js
+const userInput = "<script>alert('xss')</script>";
+$("#output").text(userInput); // displayed as text, not executed as HTML
+```
+
+## 5.3 Reading and changing form values
+
+```js
+const name = $("#name").val();
+$("#name").val("Mykhaylo"); // sets the secound value into the input field
+```
+
+## 5.4 Attributes and properties
+
+```js
+$("img").attr("src", "photo.png");
+$("a").attr("href", "https://example.com");
+$("input").prop("checked", true);
+```
+
+Use `.attr()` for HTML attributes. Use `.prop()` for live DOM properties such as `checked`, `selected`, and `disabled`.
+
+## 5.5 Classes and CSS
+
+```js
+$("#box").addClass("active");
+$("#box").removeClass("hidden");
+$("#box").toggleClass("selected");
+$("#box").hasClass("active");
+```
+
+Direct CSS changes:
+```js
+$("#box").css("background-color", "yellow");
+$("#box").css({
+  width: "200px",
+  height: "100px",
+  border: "1px solid black"
+});
+```
+
+In real projects, prefer classes for styling because CSS stays in CSS:
+```js
+$("#box").addClass("warning");
+```
+
+## 5.6 Inserting and removing elements
+```js
+$("#list").append("<li>New item at the end</li>");
+$("#list").prepend("<li>New item at the beginning</li>");
+$("#title").after("<p>Text after title</p>");
+$("#title").before("<p>Text before title</p>");
+```
+
+Remove content:
+```js
+$(".error").remove();  // removes the element itself
+$("#list").empty();    // removes child elements, keeps #list
+```
+
+## 5.7 Small DOM example
+
+HTML:
+```html
+<input id="task-input" placeholder="Task name" />
+<button id="add-task">Add</button>
+<ul id="task-list"></ul>
+```
+
+jQuery:
+```js
+$(function () {
+	$("#add-task").on("click", addTask);
+	$("task-list").on("click", "delete", deleteTask);
+});
+
+function addTask() {
+	const task = $("#task-input").val().trim();
+	
+	
+	if (text === ""){
+		return;
+	}
+	
+	const item = $("<li></li>");
+	const label = $("<span></span>").text(text);  
+	const button = $("<button></button>").text("Delete").addClass("delete");
+	
+	item.append(label, " ", button);
+	$("#task-list").append(item);
+	$("#task-input").val("");
+}
+
+function deleteTask() {
+	$(this).closest("li").remove();
+}
+```
+
+
+---
+
+# 6. Effects and Animation
+
+## 6.1 Simple effects
+
+jQuery has built-in effects for showing, hiding, fading, and sliding elements.
+
+```js
+$("#box").hide();
+$("#box").show();
+$("#box").toggle();
+```
+
+## 6.2 Fading
+
+```js
+$("#message").fadeIn('fast');
+$("#message").fadeOut(300);
+$("#message").fadeToggle(300);
+$("#message").fadeTo(300, 0.5);
+```
+- `.fadeToggle()` switches between fade in and fade out
+
+## 6.3 Sliding
+
+```js
+$("#panel").slideDown(300);
+$("#panel").slideUp(300);
+$("#panel").slideToggle(300);
+```
+Common use case: dropdowns and collapsible panels.
+
+HTML:
+```html
+<button id="toggle-help">Help</button>
+<div id="help-panel" style="display: none;">
+  This is man text.
+</div>
+```
+
+jQuery:
+```js
+$("#toggle-help").on("click", function () {
+  $("#help-panel").slideToggle(300);
+});
+```
+
+## 6.4 Custom animation with `.animate()`
+
+`.animate()` changes numeric CSS properties over time.
+```js
+$("#box").animate({
+  width: "300px",
+  opacity: 0.5,
+  marginLeft: "50px"
+}, 600);
+```
+Important: `.animate()` works best with numeric CSS properties. It cannot directly animate colors without extra plugins.
+
+## 6.5 Animation callbacks
+
+A callback runs after the animation finishes.
+```js
+$("#box").fadeOut(300, function () {
+  console.log("Animation finished");
+  $(this).remove();
+});
+```
+
+
+---
+
+# 7. Ajax
+
+## 7.1 What Ajax means
+
+Ajax means loading data from a server without refreshing the whole page.
+
+Examples:
+- loading search results
+- sending a form in the background
+- getting JSON data from an API
+- updating a part of the page without reloading
+
+## 7.2 Basic `$.ajax()` request
+```js
+$.ajax({
+  url: "/api/users",
+  method: "GET",
+  dataType: "json",
+  success: function (users) {
+    console.log(users);
+  },
+  error: function (xhr, status, error) {
+    console.error("Request failed:", error);
+  }
+});
+```
+
+## 7.3 GET request with `$.get()`
+```js
+$(document).ready(function(){
+	$.get("/api/users", function (users) {
+	  console.log(users);
+	});
+})
+```
+
+## 7.4 JSON request with `$.getJSON()`
+```js
+$.getJSON("/api/products", function (products) {
+  products.forEach(function (product) {
+    $("#products").append(
+      $("<li></li>").text(product.name)
+    );
+  });
+});
+```
+
+## 7.5 POST request
+```js
+$.ajax({
+  url: "/api/tasks",
+  method: "POST",
+  contentType: "application/json",
+  data: JSON.stringify({
+    title: "Learn jQuery",
+    done: true
+  }),
+  success: function (createdTask) {
+    console.log("Created:", createdTask);
+  },
+  error: function (xhr) {
+    console.error("Server error:", xhr.responseText);
+  }
+});
+```
+
+## 7.6 Ajax with form data
+```html
+<form id="profile-form">
+  <input name="username" />
+  <input name="email" />
+  <button type="submit">Save</button>
+</form>
+```
+```js
+$("#profile-form").on("submit", function (event) {
+  event.preventDefault();
+
+  $.ajax({
+    url: "/api/profile",
+    method: "POST",
+    data: $(this).serialize(),
+    success: function () {
+      $("#status").text("Saved successfully");
+    },
+    error: function () {
+      $("#status").text("Save failed");
+    }
+  });
+});
+```
+
+
+## 7.7 Global Ajax events
+
+jQuery can react to Ajax activity globally:
+```js
+<div id="loading">Loading...</div>  
+  
+<button id="load-user">Load User</button>  
+<button id="load-both">Load Both</button>  
+  
+<div id="result">Result will appear here...</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+	$(document).on("ajaxStart", function(){
+		$("#loading").show();
+	});
+	
+	$(document).on("ajaxStop", function () {
+		$("#loading").hide();
+	});
+	
+	$("#load-user").on("click", function() {
+		$.ajax({
+			url: "https://jsonplaceholder.typicode.com/users/1",  
+			method: "GET"
+		})
+		.done(function (user) {
+			$("#result").html(
+				`
+				<h2>User loaded</h2>
+				<p>Name: ${user.name}</p>  
+				<p>Email: ${user.email}</p>
+				`
+			)
+		})
+		.fail(function () {  
+			$("#result").text("Could not load user.");  
+		});
+	});
+	
+	// Global events when the button clicked a request started and because jquery automatically triggers the ajaxStart the same for the ajaxStop
+	
+	$("#load-both").on("click", function () {
+      $("#result").html("");
+
+      $.ajax({
+        url: "https://jsonplaceholder.typicode.com/users/1",
+        method: "GET"
+      })
+      .done(function (user) {
+        $("#result").append(`
+          <h2>User</h2>
+          <p>${user.name}</p>
+        `);
+      });
+
+      $.ajax({
+        url: "https://jsonplaceholder.typicode.com/posts/1",
+        method: "GET"
+      })
+      .done(function (post) {
+        $("#result").append(`
+          <h2>Post</h2>
+          <p>${post.title}</p>
+        `);
+      });
+    });
+</script>
+```
+
+Ajax loads data without reloading the page because it does **not use the browser’s normal navigation mechanism**.
+
+Internally, jQuery uses the browser’s HTTP request APIs, historically `XMLHttpRequest`. Modern JavaScript often uses `fetch()`, Ajax does not trigger document navigation. It creates a network request from the current JavaScript runtime. The response is delivered back to JavaScript as data, not as a replacement document.
+
+---
+
+# 8. What changed in 2026: jQuery 4.0
+
+## 8.1 General update
+Important points:
+- jQuery 4.0.0 is the current major release.
+- jQuery 3.x now receives only critical updates.
+- Some older deprecated APIs and undocumented behaviors were removed.
+- The jQuery Migrate plugin is recommended when upgrading older code.
+
+## 8.2 Browser support changes
+jQuery 4.0 removed support for very old browsers, including:
+- Internet Explorer 10 and older
+- legacy non-Chromium Edge
+- old mobile Safari versions
+- old Android browser versions
+
+Internet Explorer 11 is still supported in jQuery 4.0, but older IE-specific code was reduced.
+
+## 8.3 Selectors in jQuery 4.0
+Selector-related update:
+- jQuery 4.0 fixed selection-context behavior in the newer selector-native path.
+- Support for legacy custom pseudos was dropped.
+
+Normal selectors like these are still fine. Problems are more likely in older projects that used custom or unusual selector extensions.
+
+## 8.4 Ajax in jQuery 4.0
+Ajax had several important changes:
+- JSON requests are no longer automatically promoted to JSONP(JSONP is not really “data only” It is executable JavaScript)
+- Scripts loaded through Ajax are no longer auto-executed unless `dataType: "script"` is explicitly used.
+- Async script requests now prefer script tags to avoid some Content Security Policy problems.
+- Support for binary data through `FormData` was improved.
+```js
+$.ajax({
+  url: "https://example.com/data?callback=?",
+  dataType: "jsonp"
+});
+
+$.ajax({
+  url: "/scripts/plugin.js",
+  dataType: "script"
+});
+```
