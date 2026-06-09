@@ -14,16 +14,15 @@
 </script>
 
 <template>
-	  <input :value="modelValue" @input="updateInput" class="input" type="text">
-
+  <input :value="modelValue" @input="updateInput" class="input" type="text">
 </template>
 
 <style scoped>
 .input {
-  width: 100%;
-  border: 1px solid teal;
+  width: -webkit-fill-available;
+  border: 2px solid teal;
   padding: 10px;
-  margin-top: 10px;
+  margin: 6px;
 }
 
 </style>

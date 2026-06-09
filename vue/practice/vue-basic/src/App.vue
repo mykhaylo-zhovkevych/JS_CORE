@@ -6,14 +6,17 @@ import VDialog from "@/UI/VDialog.vue";
 import axios from "axios";
 import VButton from "@/UI/VButton.vue";
 import VSelect from "@/UI/VSelect.vue";
+import VInput from "@/UI/VInput.vue";
+import PostIndex from "@/components/PostIndex.vue";
 export default {
   components: {
+    PostIndex,
+    VInput,
     VSelect,
     VButton,
     VDialog,
     PostForm, PostList
   },
-
   data() {
     return {
       posts: [
@@ -24,6 +27,10 @@ export default {
       isPostLoading: false,
       dialogVisible: false,
       selectedSort: '',
+      searchQuery: '',
+      page: 1,
+      limit: 10,
+      totalCount: 0,
       sortOptions: [
         {value: 'title', name: 'By naming'},
         {value: 'body', name: 'By description'},
@@ -41,11 +48,21 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+    async changePage(pageVal) {
+      this.page = pageVal;
+      await this.fetchUser();
+    },
     async fetchUser() {
       try {
         this.isPostLoading = true;
         await new Promise(resolve => setTimeout(resolve, 1000));
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts',{
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        });
+        this.totalCount = Math.ceil(response.headers['x-total-count'] / this.limit)
         this.posts = response.data;
       } catch (e) {
         alert('Error fetching')
@@ -67,8 +84,10 @@ export default {
       if (!this.selectedSort) {
         return this.posts;
       }
-
       return [...this.posts].sort((a, b) => a[this.selectedSort].localeCompare(b[this.selectedSort]));
+    },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter(p => p.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
     }
   },
 }
@@ -78,7 +97,8 @@ export default {
 <template>
   <div class="app">
     <h1>Post creation</h1>
-      <div class="app__bths">
+    <VInput v-model="searchQuery" placeholder="Search by title" />
+    <div class="app__bths">
         <VButton @click="showDialog">Create post</VButton>
         <v-select v-model="selectedSort" :options="sortOptions" />
       </div>
@@ -90,10 +110,11 @@ export default {
       Loading...
     </div>
     <!--v-bind:posts -> shorter version :posts-->
-    <post-list v-else-if="posts.length > 0" v-bind:posts="sortedPosts" @remove="removePost" />
+    <post-list v-else-if="posts.length > 0" v-bind:posts="sortedAndSearchedPosts" @remove="removePost" />
     <h2 v-else style="color: darkred">
       List is empty
     </h2>
+    <post-index :page="page" :total-count="totalCount" @change="changePage" />
   </div>
 </template>
 
