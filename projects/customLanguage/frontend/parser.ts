@@ -354,21 +354,23 @@ export default class Parser {
         const tk = this.at().type;
 
         switch (tk) {
-            case TokenType.Identifier:
+            case TokenType.Identifier: {
                 const identifier: Identifier = {
                     kind: "Identifier",
                     symbol: this.eat().value,
                 };
 
                 return identifier;
-            case TokenType.Number: 
-            const numericLiteral: NumericLiteral = {
+            }
+            case TokenType.Number: {
+                const numericLiteral: NumericLiteral = {
                     kind: "NumericLiteral",
                     value: parseFloat(this.eat().value),
                 };
 
                 return numericLiteral;  
-            
+            }
+
             case TokenType.OpenParen: {
                 this.eat(); // eat the open paren
                 const value = this.parse_expr();
