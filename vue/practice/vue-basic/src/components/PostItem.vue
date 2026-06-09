@@ -13,7 +13,7 @@ defineEmits(['remove'])
 <template>
   <div class="post">
     <div>
-      <div><strong>Description</strong>{{post.title}}</div>
+      <div><strong>Naming</strong>{{post.title}}</div>
       <div><strong>Description</strong>{{post.body}}</div>
     </div>
     <div class="post__bth">

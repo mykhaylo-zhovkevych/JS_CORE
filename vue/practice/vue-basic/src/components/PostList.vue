@@ -15,7 +15,9 @@ export default {
 <template>
   <div>
     <h2>Naming of lists</h2>
-    <post-item class="post" v-for="post in posts" :post="post" :key="post.id" @remove="$emit('remove', post)"/>
+    <transition-group name="post-list">
+      <post-item class="post" v-for="post in posts" :post="post" :key="post.id" @remove="$emit('remove', post)"/>
+    </transition-group>
   </div>
 </template>
 
@@ -24,5 +26,21 @@ export default {
   padding: 15px;
   border: 2px solid teal;
   margin-top: 15px;
+}
+
+.post-list-move,
+.post-list-enter-active,
+.post-list-leave-active {
+  transition: all 0.1s ease;
+}
+
+.post-list-enter-from,
+.post-list-leave-to {
+  opacity: 0;
+  transform: translateX(130px);
+}
+
+.post-list-leave-active {
+  position: absolute;
 }
 </style>
