@@ -15,7 +15,7 @@ defineProps({
       <div><strong>Description</strong>{{post.body}}</div>
     </div>
     <div class="post__bth">
-      <Button>Delete</Button>
+      <VButton>Delete</VButton>
     </div>
   </div>
 </template>

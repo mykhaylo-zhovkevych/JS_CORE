@@ -35,20 +35,13 @@ export default {
 <template>
   <form @submit.prevent="createPost">
     <h3>Creation of Post</h3>
-    <!--Manuall setters-->
-    <input v-bind:value="post.title" @input="post.title = $event.target.value" class="input" type="text" placeholder="Naming field">
-    <input v-bind:value="post.body" @input="post.body = $event.target.value" class="input" type="text" placeholder="Description field">
-    <Button class="bth" type="submit" style="margin-top: 10px">Add post</Button>
+    <VInput v-bind:value="post.title" @input="post.title = $event.target.value" placeholder="Naming field" />
+    <VInput v-model="post.body" placeholder="Description field" />
+    <VButton class="bth" type="submit" style="margin-top: 10px">Add post</VButton>
   </form>
 </template>
 
 <style scoped>
-.input {
-  width: 100%;
-  border: 1px solid teal;
-  padding: 10px;
-  margin-top: 10px;
-}
 
 form {
   display: flex;
