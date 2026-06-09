@@ -3,6 +3,7 @@ import PostItem from "@/components/PostItem.vue";
 
 export default {
   components: {PostItem},
+  emits: ['remove'],
   props: {
     posts: {
       type: Array,
@@ -13,7 +14,8 @@ export default {
 </script>
 <template>
   <div>
-    <post-item class="post" v-for="post in posts" :post="post"/>
+    <h2>Naming of lists</h2>
+    <post-item class="post" v-for="post in posts" :post="post" :key="post.id" @remove="$emit('remove', post)"/>
   </div>
 </template>
 

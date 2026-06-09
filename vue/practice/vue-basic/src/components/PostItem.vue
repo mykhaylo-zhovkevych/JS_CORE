@@ -1,3 +1,4 @@
+<!-- Shorter way in Vue 3 -->
 <script setup>
 
 defineProps({
@@ -6,6 +7,7 @@ defineProps({
     required: true,
   }
 })
+defineEmits(['remove'])
 </script>
 
 <template>
@@ -15,7 +17,7 @@ defineProps({
       <div><strong>Description</strong>{{post.body}}</div>
     </div>
     <div class="post__bth">
-      <VButton>Delete</VButton>
+      <VButton @click="$emit('remove', post)">Delete</VButton>
     </div>
   </div>
 </template>
