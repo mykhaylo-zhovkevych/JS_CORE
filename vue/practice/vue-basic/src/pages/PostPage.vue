@@ -68,7 +68,8 @@ export default {
             _limit: this.limit,
           }
         });
-        this.totalCount = Number(response.headers['X-Total-Page'])
+        this.totalCount = Number(response.headers['x-total-pages'])
+        //console.log(this.totalCount)
         this.posts = response.data;
       } catch (e) {
         alert('Error fetching')
