@@ -62,13 +62,13 @@ export default {
       try {
         this.isPostLoading = true;
         await new Promise(resolve => setTimeout(resolve, 1000));
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts',{
+        const response = await axios.get('http://localhost:3000/posts',{
           params: {
             _page: this.page,
             _limit: this.limit,
           }
         });
-        this.totalCount = Math.ceil(response.headers['x-total-count'] / this.limit)
+        this.totalCount = Number(response.headers['X-Total-Page'])
         this.posts = response.data;
       } catch (e) {
         alert('Error fetching')

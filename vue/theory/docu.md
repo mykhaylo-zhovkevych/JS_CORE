@@ -1,3 +1,19 @@
+# Docu
+
+## What is Vuex? 
+Vuex is a centralized state-management library for Vue applications
+_It stores data that must be shared by several components in one central place called store. Components can read from the store and request changes to it in a predictable way._
+
+``` txt
+Components
+    ↓ dispatch actions / commit mutations
+Vuex Store
+    ↓ provides reactive state
+Components update automatically 
+```
+Imagine that the same information is needed by many unrelated components:
+Then I would need to keep several copies of the same data synchronized and pass values downwards through several levels using props.
+
 ### Content index:
 | Level | Topic                                 | Main idea                                                                |
 |-------| ------------------------------------- | ------------------------------------------------------------------------ |
