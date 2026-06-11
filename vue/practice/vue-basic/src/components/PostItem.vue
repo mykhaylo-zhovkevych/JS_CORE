@@ -17,8 +17,13 @@ defineEmits(['remove'])
       <div><strong>Naming</strong>{{post.title}}</div>
       <div><strong>Description</strong>{{post.body}}</div>
     </div>
-    <div class="post__bth">
-      <VButton @click="$emit('remove', post)">Delete</VButton>
+    <div class="post__bths">
+      <div class="post__bth">
+        <VButton @click="$router.push(`/posts/${post.id}`)">Open</VButton>
+      </div>
+      <div class="post__bth">
+        <VButton @click="$emit('remove', post)">Delete</VButton>
+      </div>
     </div>
   </div>
 </template>
@@ -33,4 +38,9 @@ defineEmits(['remove'])
   justify-content: space-between;
 
 }
+
+.post__bths {
+  display: flex;
+}
+
 </style>

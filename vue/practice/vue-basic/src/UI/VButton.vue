@@ -12,7 +12,6 @@ export default {
 
 <style scoped>
 .bth {
-  display: flex;
   padding: 10px 15px;
   background: none;
   color: teal;
