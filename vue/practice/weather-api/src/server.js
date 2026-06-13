@@ -73,13 +73,12 @@ app.get('/posts/:id', (request, response) => {
         });
     }
 
-    const pageId = Math.floor(postIndex / DEFAULT_PAGE_SIZE) + 1;
-
+    const pageNumber = Math.floor(postIndex / DEFAULT_PAGE_SIZE) + 1;
     const positionInPage = (postIndex % DEFAULT_PAGE_SIZE) + 1;
 
     return response.json({
         ...posts[postIndex],
-        pageId,
+        pageNumber,
         positionInPage
     });
 });
