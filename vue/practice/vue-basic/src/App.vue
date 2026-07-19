@@ -1,6 +1,7 @@
 <template>
     <Navbar></Navbar>
     <div class="app">
+      <p :class="demoClass">classnames is resolving from the workspace root</p>
       <router-view>
       </router-view>
     </div>
@@ -9,10 +10,19 @@
 <script>
 
 import {defineComponent} from "vue";
+import classNames from "classnames";
 import Navbar from "@/components/Navbar.vue";
 
 export default defineComponent({
-  components: {Navbar}
+  components: {Navbar},
+  computed: {
+    demoClass() {
+      return classNames("demo-box", {
+        active: true,
+        inactive: true
+      })
+    }
+  }
 })
 </script>
 
@@ -25,6 +35,14 @@ box-sizing: border-box;
 
 .app {
 padding: 20px;
+}
+
+.demo-box {
+  color: teal;
+}
+
+.active {
+  border: 2px solid teal;
 }
 
 </style>
