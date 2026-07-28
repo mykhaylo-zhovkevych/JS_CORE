@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modal Dataset Example</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <h1>Modal Dataset Example</h1>
+
+  <button class="modal-open" data-target="#modifyWordModal">
+    Open Modify Box
+  </button>
+
+  <button class="modal-open" data-target="#deleteWordModal">
+    Open Delete Box
+  </button>
+
+  <div id="modifyWordModal" class="modal hide">
+    <div class="modal-content">
+      <div class="generated-container">
+        <h2>Modify Box</h2>
+        <p>Here you can modify a instance.</p>
+
+
+        <button class="modal-close" data-target="#modifyWordModal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="deleteWordModal" class="modal hide">
+    <div class="modal-content">
+      <div class="generated-container">
+        <h2>Delete Box</h2>
+        <p>Here you can delete a instance.</p>
+
+        <button class="modal-close" data-target="#deleteWordModal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./code.js"></script>
+</body>
+</html>

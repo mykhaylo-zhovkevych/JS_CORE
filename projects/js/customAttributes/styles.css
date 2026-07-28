@@ -1,0 +1,26 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 30px;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.modal {
+  border: 1px solid black;
+  padding: 20px;
+  margin-top: 15px;
+  background-color: white;
+}
+
+.modal-content {
+  border: 1px solid gray;
+  padding: 15px;
+}
+
+.hide {
+  display: none;
+}
