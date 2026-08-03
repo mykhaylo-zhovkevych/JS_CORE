@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Github Finder</title>
+    <title>GitHub Finder</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -19,7 +19,7 @@
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, ipsa.
                 </p>
                 <div class="search-container">
-                    <input type="text" id="search" placeholder="Enter a Github username..." autocomplete="off">
+                    <input type="text" id="search" placeholder="Enter a GitHub username..." autocomplete="off">
                     <button id="search-btn">Search</button>
                 </div>
 
@@ -33,7 +33,7 @@
                             <p id="bio"></p>
                             <div class="location-data">
                                 <p>
-                                    <i class="fas fa-map-marker-alt"></i>
+                                    <i class="fas fa-calendar-alt"></i>
                                     <span id="location">Not specified</span>
                                 </p>
                                 <p>
@@ -42,7 +42,7 @@
                                     <span id="joined-date"></span>
                                 </p>
                             </div>
-                            <a id="profile-link" target="_blank" class="btn">
+                            <a id="profile-link" target="_blank" rel="noopener noreferrer" class="btn">
                                 View Profile
                             </a>
                         </div>
@@ -70,16 +70,16 @@
                         </div>
                         <div class="info-item" id="blog-container">
                             <i class="fas fa-link"></i>
-                            <a id="blog" target="_blank">No website</a>
+                            <a id="blog" target="_blank" rel="noopener noreferrer">No website</a>
                         </div>
                         <div class="info-item" id="twitter-container">
                             <i class="fab fa-twitter"></i>
-                            <a id="twitter" target="_blank">No Twitter</a>
+                            <a id="twitter" target="_blank" rel="noopener noreferrer">No Twitter</a>
                         </div>
                     </div>
 
                     <div class="repos-section">
-                        <h3>Latest Repo</h3>
+                            <h3>Latest Repositories</h3>
                         <div id="repos-container" class="repos-container">
                             <div>
                                 <div class="loading-repos">
@@ -91,15 +91,13 @@
 
                 </div>
                 <div id="error-container" class="hidden">
-                    <p>
+                    <p id="error-message">
                         No user found. Please try another username.
                     </p>
                 </div>
 
             </header>
         </div>
+        <script src="script.js"></script>
     </body>
-
-    <script src="script.js"></script>
 </html>
-

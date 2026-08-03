@@ -126,7 +126,7 @@ button:hover {
     margin-bottom: 10px;
 }
 
-.bio {
+#bio {
     color: var(--text-gray);
     margin-bottom: 15px;
 }
@@ -304,7 +304,7 @@ button:hover {
     color: var(--text-gray);
     text-align: center;
     padding: 20px;
-    /* from frist until last one */
+    /* Span from the first through the last grid column. */
     grid-column: 1 /-1;
 }
 

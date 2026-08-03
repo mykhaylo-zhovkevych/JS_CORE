@@ -1,8 +1,11 @@
+'use strict';
+
 const searchInput = document.getElementById('search');
 const searchBtn = document.getElementById('search-btn');
-const profileContainer = document.getElementById('profile-container');
 
+const profileContainer = document.getElementById('profile-container');
 const errorContainer = document.getElementById('error-container');
+const errorMessage = document.getElementById('error-message');
 
 const avatar = document.getElementById('avatar');
 const nameElement = document.getElementById('name');
@@ -12,18 +15,20 @@ const locationElement = document.getElementById('location');
 const joinedDateElement = document.getElementById('joined-date');
 
 const profileLink = document.getElementById('profile-link');
-const followers = document.getElementById('followers');
-const following = document.getElementById('following');
-const repos = document.getElementById('repos');
+const followersElement = document.getElementById('followers');
+const followingElement = document.getElementById('following');
+const repoCountElement = document.getElementById('repos');
 
 const companyElement = document.getElementById('company');
 const blogElement = document.getElementById('blog');
 const twitterElement = document.getElementById('twitter'); 
-
-const companyContainer = document.getElementById('company-container');
-const blogContainer = document.getElementById('blog-container');
-const twitterContainer = document.getElementById('twitter-container');
 const reposContainer = document.getElementById('repos-container');
+
+
+const USERNAME_PATTERN = /^[a-z\d-]{1,39}$/i; 
+
+// Tracks the in-flight request so a newer search can cancel an older one
+let controller = null;
 
 
 searchBtn.addEventListener('click', searchUser);
@@ -31,31 +36,64 @@ searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') searchUser();
 });
 
-async function searchUser() {
-const username = searchInput.value.trim();
 
-if (!username) return alert('Please enter a username.');
+const API_BASE = 'https://api.github.com';
+const REPO_COUNT = 6;
+const REQUEST_HEADERS = { Accept: 'application/vnd.github+json' };
+
+
+
+async function searchUser() {
+    const username = searchInput.value.trim();
+
+    if (!username) {
+        showError('Enter a GitHub username to search.');
+        return;
+    }
+ 
+    if (!USERNAME_PATTERN.test(username)) {
+        showError('That is not a valid GitHub username. Use letters, numbers and hyphens.');
+        return;
+    }
+
+    controller?.abort();
+    controller = new AbortController();
+    const signal = controller.signal;
+
+    hideError();
+    profileContainer.classList.add('hidden');
+    setLoading(true);
+
 
     try {
-        profileContainer.classList.add('hidden');
-        errorContainer.classList.add('hidden');
         // https://api.github.com/users/{username}
-        const response = await fetch(`https://api.github.com/users/${username}`);
-        if (!response.ok) throw new Error('User not found');
+        const response = await fetch(`${API_BASE}/users/${encodeURIComponent(username)}`,
+            { signal, headers: REQUEST_HEADERS }
+        );
 
-        const data = await response.json();
-        //console.log(data);
+        if (!response.ok) throw new Error(describeHttpError(response));
 
-        displayUserData(data);
+    
+        const user = await response.json();
+        
+        displayUserData(user);
+        profileContainer.classList.remove('hidden');
 
-        fetchRepositories(data.repos_url);
+        await fetchRepositories(user.repos_url, signal);
         } catch (error) {
-        showError();
+            if (error.name === 'AbortError') return;
+            showError(error.message);
+        }
+    finally {
+        // Only celar the spinner if this request is still the current one
+        if (controller?.signal === signal) setLoading(false);
     }
 }
 
 function displayUserData(user) {
     avatar.src = user.avatar_url;
+    avatar.alt = `Avatar of ${user.login}`;
+
     nameElement.textContent = user.name || user.login;
     usernameElement.textContent = `@${user.login}`;
     bioElement.textContent = user.bio || 'No bio available';
@@ -64,101 +102,181 @@ function displayUserData(user) {
     joinedDateElement.textContent = formatDate(user.created_at);
 
     profileLink.href = user.html_url;
-    followers.textContent = user.followers;
-    following.textContent = user.following;
-    repos.textContent = user.public_repos;
 
-    if (user.company) companyElement.textContent = user.company;
-    else companyElement.textContent = 'Company not available';
+    followersElement.textContent = formatNumber(user.followers);
+    followingElement.textContent = formatNumber(user.following);
+    repoCountElement.textContent = formatNumber(user.public_repos);
 
-    if (user.blog) {
-        blogElement.textContent = user.blog;
-        blogElement.href = user.blog.startsWith('http') ? user.blog : `http://${user.blog}`;
-    } else {
-        blogElement.textContent = 'No website available';
-        blogElement.href = '#';
-    }
+    companyElement.textContent = user.company || "Not specified";
 
-    blogContainer.style.display = 'flex';
+    // User.blog is a text validate the protocol before it becomes an href
+    setLink(blogElement, safeUrl(user.blog), user.blog, "No website");
+    
 
-    profileContainer.classList.remove('hidden');
+    setLink(
+        twitterElement, user.twitterElement ? `https://twitter.com/${encodeURIComponent(user.twitter_username)}` : null,
+        `@${user.twitter_username}`, "No Twitter"
+    );
 
 }
 
 
-function formatDate(dateString) {
 
+function setLink(anchor, url, label, fallback) {
+    if (url) {
+        anchor.href = url;
+        anchor.textContent = label;
+    } else {
+        anchor.removeAttribute('href');
+        anchor.textContent = fallback;
+    }
+}
+
+function safeUrl(value) {
+    if (!value) return null;
+
+    try {
+        const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);    
+        return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : null;
+    
+    } catch {
+        return null;
+    }
+}
+
+
+async function fetchRepositories(repos_url, signal) {
+    reposContainer.replaceChildren(
+        createMessage('loading-repos', 'Loading repositories...')
+    );
+
+    const url = new URL(repos_url);
+    url.searchParams.set('sort', 'updated');       // the heading says "latest"
+    url.searchParams.set('per_page', String(REPO_COUNT));
+
+
+    try {
+        const response = await fetch(url, {singal, headers: REQUEST_HEADERS });
+
+        if (!response.ok) throw new Error(describeHttpError(response));
+        const repos = await response.json();
+
+        if (!Array.isArray(repos)) throw new Error ('Github returned unexpected data.');
+
+        displayRepos(repos);
+    } catch (err) {
+        if (err.name === 'AbortError') return;
+        reposContainer.replaceChildren(...createMessage('no-repos', error.message));
+    }
+}
+
+
+function displayRepos(repos) {
+    if (repos.length === 0) {
+        reposContainer.replaceChildren(
+            createMessage('no-repos', 'This account has no public repositories')
+        );
+        return;
+    }
+
+    reposContainer.replaceChildren(...repos.map(createRepoCard));
+
+
+}
+
+function createRepoCard(repo) {
+    const card = document.createElement('div');
+    card.classList = 'repo-card';
+
+    const link = document.createElement('a');
+    link.className = 'repo-name';
+    link.href = repo.html_url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.append(icon('fa-code-branch'), ` ${repo.name}`);
+
+    const description = document.createElement('p');
+    description.className = 'repo-description';
+    description.textContent = repo.description  || 'No description available';
+
+    const meta = document.createElement('div');
+    meta.className = 'repo-meta';
+
+
+    if (repo.language) meta.append(metaItem('fa-circle', repo.language));
+
+    meta.append(
+        metaItem('fa-star', formatNumber(repo.stargazers_count)),
+        metaItem('fa-code-fork', formatNumber(repo.forks_count)),
+        metaItem('fa-history', formatDate(repo.updated_at))
+    );
+
+
+    card.append(link, description, meta);
+    return card;
+}
+
+
+// UI 
+function setLoading(isLoading) {
+    searchBtn.disabled = isLoading;
+    searchBtn.textContent = isLoading ? 'Searching...' : 'Search';
+}
+
+function showError(message) {
+    errorMessage.textContent = message;
+    errorContainer.classList.remove('hidden');
+    profileContainer.classList.add('hidden');
+}
+ 
+function hideError() {
+    errorContainer.classList.add('hidden');
+}
+
+
+
+function metaItem(iconClass, text) {
+    const item = document.createElement('div');
+    item.className = 'repo-meta-item';
+    item.append(icon(iconClass), ` ${text}`);
+    return item;
+}
+
+function icon(iconClass) {
+    const element = document.createElement('i');
+    element.className = `fas ${iconClass}`;
+    element.setAttribute('aria-hidden', 'true');
+    return element;
+}
+
+
+function createMessage(className, text) {
+    const el = document.createElement('div');
+    el.className = className;
+    el.textContent = text;
+    return el;
+}
+
+
+// Helpers
+function describeHttpError(response) {
+    if (response.status === 404) {
+        return 'No user found with that username. Check the spelling and try again.';
+    }
+    if (response.status === 403 || response.status === 429) {
+        return 'GitHub rate limit reached (60 requests per hour). Try again later.';
+    }
+    return `GitHub returned an error (${response.status}).`;
+}
+
+function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric', 
-        month: 'short', 
+        year: 'numeric',
+        month: 'short',
         day: 'numeric'
     });
 }
 
-function showError() {
-    errorContainer.classList.remove('hidden');
-    profileContainer.classList.add('hidden');
+function formatNumber(value) {
+    return new Intl.NumberFormat('en-US').format(value ?? 0);
 }
-
-
-async function fetchRepositories(resposUrl) {
-    reposContainer.innerHTML = '<div class="loading-repos">Loading repositories...</div>';
-
-    try {
-        const response = await fetch(resposUrl + '?per_page=6');
-        const repos = await response.json();
-
-        displayRepos(repos);
-    } catch (error) {
-        reposContainer.innerHTML = `<div class="no-repos">${error.message}.</div>`;
-    }
-}
-
-function displayRepos(repos) {
-    if (repos.length === 0) {
-        reposContainer.innerHTML = '<div class="no-repos"> No repositories found.</div>';
-        return;
-    }
-
-    reposContainer.innerHTML = '';
-
-    repos.forEach(repo => {
-        const repoCard = document.createElement('div')
-        repoCard.className = 'repo-card';
-
-        const updatedAt = formatDate(repo.updated_at);
-
-        repoCard.innerHTML = `
-        <a href="${repo.html_url}" target="_blank" class="repo-name">
-            <i class="fas fa-code-branch"></i> ${repo.name}
-        </a>
-            <p class="repo-description">${repo.description || "No description available"}</p>
-            <div class="repo-meta">
-                ${
-                repo.language
-                    ? `
-                <div class="repo-meta-item">
-                    <i class="fas fa-circle"></i> ${repo.language}
-                </div>
-                `
-                    : ""
-                }
-                <div class="repo-meta-item">
-                    <i class="fas fa-star"></i> ${repo.stargazers_count}
-                    </div>
-                    <div class="repo-meta-item">
-                    <i class="fas fa-code-fork"></i> ${repo.forks_count}
-                    </div>
-                    <div class="repo-meta-item">
-                    <i class="fas fa-history"></i> ${updatedAt}
-                </div>
-            </div>
-        `;
-
-        reposContainer.appendChild(repoCard);
-    })
-
-}
-
-// searchInput.value = 'mykhaylo-zhovkevych';
-// searchUser();
