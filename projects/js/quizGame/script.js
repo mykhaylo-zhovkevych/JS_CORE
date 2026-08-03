@@ -103,17 +103,16 @@ function showQuestion() {
 
     answersContainer.innerHTML = '';
 
-    currentQuestion.answers.forEach((answer => {
+    currentQuestion.answers.forEach((answer, index) => {
         const button = document.createElement('button');
         button.textContent = answer.text;
         button.classList.add('answer-btn');
-
-        // Dataset property that allows store own(custom) data
-        button.dataset.correct = answer.correct;
+    
+        button.dataset.index = index;
         button.addEventListener('click', selectAnswer);
 
         answersContainer.appendChild(button);
-    }))
+    })
 }
 
 function selectAnswer(e) {
@@ -121,10 +120,14 @@ function selectAnswer(e) {
 
     answersDisabled = true;
     const selectedBtn = e.target;
-    const isCorrect = selectedBtn.dataset.correct === 'true';
 
-    Array.from(answersContainer.children).forEach(button => {
-        if (button.dataset.correct === 'true') {
+    const selectedIndex = Number(e.currentTarget.dataset.index);
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+
+    const IsCorrect = currentQuestion.answers[selectedIndex].correct;
+
+    Array.from(answersContainer.children).forEach((button, i) => {
+        if (currentQuestion.answers[i].correct) {
             button.classList.add('correct');
         } else if (button === selectedBtn) {
             button.classList.add('incorrect');
@@ -136,7 +139,6 @@ function selectAnswer(e) {
         scoreSpan.textContent = score;
     }
 
-    // Game logic
     setTimeout(() => {
         currentQuestionIndex++;
         if (currentQuestionIndex < quizQuestions.length) {

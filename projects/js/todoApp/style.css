@@ -9,7 +9,7 @@
     --primary-light: #a67cff;
     --dark: #333;
     --light: #fff;
-    --gray: #f0f0f0;
+    --gray: #6c757d;
     --danger: #ff4d4d;
     --success: #4CAF50;
     --border: #ccc;
@@ -17,7 +17,7 @@
 
 body {
     font-family: sans-serif;
-    background-color: #f1f3f5;
+    background-color: #285787;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -99,6 +99,7 @@ header p {
     gap: 15px;
     border-bottom: 1px solid var(--border);
     padding: 15px 25px;
+    color: #000;
 }
 
 .filter {
