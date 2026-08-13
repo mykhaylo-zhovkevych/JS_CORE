@@ -39,12 +39,6 @@ export interface Token {
     type: TokenType
 }
 
-export type StringQuote = '"' | "'";
-
-export function quoteFromTokenType (type: TokenType.DoubleQuote | TokenType.SingleQuote): StringQuote {
-    return type === TokenType.DoubleQuote ? '"' : "'";
-}
-
 export function isStringTokenType (type: TokenType): type is TokenType.DoubleQuote | TokenType.SingleQuote {
     return type === TokenType.DoubleQuote || type === TokenType.SingleQuote;
 }
@@ -129,12 +123,13 @@ export function tokenize(sourceCode: string): Token[] {
         else if (current == ',') {
             tokens.push(token(src.shift()!, TokenType.Comma));
         }
-        else if (current == '"' || current == "'") {
-            const quote = current as StringQuote;
-            const tokenType = quote === '"' ? TokenType.DoubleQuote : TokenType.SingleQuote;
-            
-            const value = readDataStringLiteral(src, quote);
-            tokens.push(token(value, tokenType));
+        else if (current === "\"") {
+            const value = readDataStringLiteral(src, '"');
+            tokens.push(token(value, TokenType.DoubleQuote));
+        }
+        else if (current === "'") {
+            const values = readDataStringLiteral(src, "'");
+            tokens.push(token(values, TokenType.SingleQuote))
         }
         else {
             // handles multi character tokes

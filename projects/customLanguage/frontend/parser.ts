@@ -1,6 +1,6 @@
 // It takes the tokens from the lexer and understands their structure (meaning)
-import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property, CallExpr, MemberExpr, FunctionDeclaration, StringLiteral } from "./ast.js";
-import { tokenize, TokenType, isStringTokenType, quoteFromTokenType, type Token } from "./lexer.js";
+import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property, CallExpr, MemberExpr, FunctionDeclaration, StringDoubleQuote, StringSingleQuote } from "./ast.js";
+import { tokenize, TokenType, isStringTokenType, type Token } from "./lexer.js";
 
 export default class Parser {
 
@@ -371,20 +371,32 @@ export default class Parser {
                 return numericLiteral;  
             }
 
-            case TokenType.DoubleQuote:
-            case TokenType.SingleQuote: {
+            case TokenType.DoubleQuote: {
                 const stringToken = this.eat();
                 if (!isStringTokenType(stringToken.type)) {
-                    throw new Error("Expected a string literal token");
-                }
-                const stringLiteral: StringLiteral = {
-                    kind: "StringLiteral",
+                    throw new Error("Expected a double string literal token");
+                };
+                const stringLiteral: StringDoubleQuote = {
+                    kind: "StringLiteralDouble",  
                     value: stringToken.value,
-                    quote: quoteFromTokenType(stringToken.type),
                     class: [],
                 };
                 return stringLiteral;
-            }
+            };
+            
+            case TokenType.SingleQuote: {
+                const stringToken = this.eat();
+                if (!isStringTokenType(stringToken.type)) {
+                    throw new Error("Expected a single string literal token");
+                };
+            
+                const stringLiteral: StringSingleQuote = {
+                    kind: "StringLiteralSingle",
+                    value: stringToken.value,
+                    class: [],
+                };
+                return stringLiteral;
+            };
 
             case TokenType.OpenParen: {
                 this.eat(); // eat the open paren

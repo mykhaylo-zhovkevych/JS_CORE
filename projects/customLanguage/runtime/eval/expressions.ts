@@ -1,7 +1,7 @@
-import type { AssignmentExpression, BinaryExpr, CallExpr, Identifier, MemberExpr, ObjectLiteral, VarDeclaration } from "../../frontend/ast.js";
+import type { AssignmentExpression, BinaryExpr, CallExpr, Identifier, MemberExpr, ObjectLiteral, StringDoubleQuote, VarDeclaration } from "../../frontend/ast.js";
 import Environment from "../environmnet.js";
 import { evaluate } from "../interpreter.js";
-import { MK_NULL, type FunctionValue, type NativeFunctionValue, type NumberValue, type ObjectValue, type RuntimeValue, type StringValue } from "../values.js";
+import {MK_NULL, type FunctionValue, type HtmlStringValue, type NativeFunctionValue, type NumberValue, type ObjectValue, type RuntimeValue, type StringValue } from "../values.js";
 
 function evaluate_numeric_expr (leftHandSide: NumberValue, rightHandSide: NumberValue, operator: string): NumberValue {
     switch (operator) {
@@ -52,6 +52,19 @@ export function evaluate_binary_expr (binop: BinaryExpr, env: Environment): Runt
             binop.operator
         );
     }
+    else if (leftHandSide.type == "html-string" && rightHandSide.type == "html-string") {
+        return evaluate_html_string_expr(
+            leftHandSide as HtmlStringValue,
+            rightHandSide as HtmlStringValue,
+            binop.operator
+        );
+    }
+    else if ((leftHandSide.type == "string" || leftHandSide.type == "html-string") && 
+    (rightHandSide.type == "string" || rightHandSide.type == "html-string")) {
+        throw new Error(
+            `Interpreter Error: Cannot use operator '${binop.operator}' between a single-quoted literal string and a double-quoted literal string`
+        );
+    }
     else {
         return MK_NULL();
     }
@@ -66,6 +79,16 @@ export function evaluate_string_expr (leftHandSide: StringValue, rightHandSide: 
         }
     }
     throw new Error(`Interpreter Error: Unsupported operator ${operator} for strings`);
+}
+
+function evaluate_html_string_expr (leftHandSide: HtmlStringValue, rightHandSide: HtmlStringValue, operator: string): HtmlStringValue {
+    if (operator === "+") {
+        return {
+            type: "html-string",
+            value: leftHandSide.value + rightHandSide.value,
+        }
+    }
+    throw new Error(`Interpreter Error: Unsupported operator ${operator} for html strings`);
 }
 
 

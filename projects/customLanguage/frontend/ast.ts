@@ -16,10 +16,9 @@ export type NodeType =
 "NumericLiteral" |
 "Identifier" |
 "BinaryExpression" |
-"StringLiteral";
+"StringLiteralSingle" |
+"StringLiteralDouble";
 
-
-export type StringQuote = '"' | "'";
 
 // abstract type
 export interface Stmt {
@@ -95,10 +94,15 @@ export interface ObjectLiteral extends Expr {
     properties: Property[];
 }
 
-
-export interface StringLiteral extends Expr {
-    kind: "StringLiteral";
+// class probably not needed
+export interface StringDoubleQuote extends Expr {
+    kind: "StringLiteralDouble";
     value: string;
-    quote: StringQuote;
+    class: string[];
+}
+
+export interface StringSingleQuote extends Expr {
+    kind: "StringLiteralSingle";
+    value: string;
     class: string[];
 }

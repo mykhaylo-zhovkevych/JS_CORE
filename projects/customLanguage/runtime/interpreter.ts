@@ -1,7 +1,7 @@
 // The interpreter walks through this structure and performs actions:
 
-import {type RuntimeValue, type NumberValue, MK_NULL, MK_STRING} from "./values.js";
-import type { AssignmentExpression, BinaryExpr, CallExpr, FunctionDeclaration, Identifier, MemberExpr, NumericLiteral, ObjectLiteral, Program, Stmt, StringLiteral, VarDeclaration } from "../frontend/ast.js";
+import {type RuntimeValue, type NumberValue, MK_NULL, MK_STRING, MK_HTML_STRING} from "./values.js";
+import type { AssignmentExpression, BinaryExpr, CallExpr, FunctionDeclaration, Identifier, MemberExpr, NumericLiteral, ObjectLiteral, Program, Stmt, StringDoubleQuote, StringSingleQuote, VarDeclaration } from "../frontend/ast.js";
 import type Environment from "./environmnet.js";
 import { evaluate_assignment, evaluate_binary_expr, evaluate_call_expr, evaluate_identifier, evaluate_member_expr, evaluate_object_expr } from "./eval/expressions.js";
 import { evaluate_function_declaration, evaluate_program, evaluate_var_declaration } from "./eval/statements.js";
@@ -15,11 +15,14 @@ export function evaluate (astNode: Stmt, env: Environment): RuntimeValue {
                 type: "number",
             } as NumberValue;
 
-        case "StringLiteral":
-            return MK_STRING((astNode as StringLiteral).value);
-
         case "Identifier":
             return evaluate_identifier(astNode as Identifier, env);
+
+        case "StringLiteralSingle":
+            return MK_STRING((astNode as StringSingleQuote).value);
+    
+        case "StringLiteralDouble":
+            return MK_HTML_STRING((astNode as StringDoubleQuote).value);
 
         case "ObjectLiteral":
             return evaluate_object_expr(astNode as ObjectLiteral, env);
@@ -47,7 +50,7 @@ export function evaluate (astNode: Stmt, env: Environment): RuntimeValue {
 
         default:
             console.error(
-                "This AST Node has not yet beeen setup for interpreation.",
+                "This AST Node has not yet been setup for interpreation.",
                 astNode,
             );
             return MK_NULL();

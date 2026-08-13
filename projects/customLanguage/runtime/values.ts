@@ -1,6 +1,6 @@
 import type { Stmt } from "../frontend/ast.js";
 import Environment from "./environmnet.js";
-export type ValueType = "null" | "number" | "boolean" | "string" | "object" | "native-fn" | "function";
+export type ValueType = "null" | "number" | "boolean" | "string" | "html-string" | "object" | "native-fn" | "function";
 export type FunctionCall = (args: RuntimeValue[], env: Environment) => RuntimeValue;
 
 export interface RuntimeValue {
@@ -45,6 +45,11 @@ export interface StringValue extends RuntimeValue {
     value: string;
 }
 
+export interface HtmlStringValue extends RuntimeValue {
+    type: "html-string";
+    value: string;
+}
+
 export function MK_NATIVE_FN (call: FunctionCall) {
     return { type: "native-fn", call } as NativeFunctionValue;
 }
@@ -72,4 +77,11 @@ export function MK_STRING (s: string = "") {
         type: "string",
         value: s,
     } as StringValue;
+}
+
+export function MK_HTML_STRING (s: string = "") {
+    return {
+        type: "html-string",
+        value: s,
+    } as HtmlStringValue;
 }
