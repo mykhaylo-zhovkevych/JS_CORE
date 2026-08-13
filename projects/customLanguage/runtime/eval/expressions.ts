@@ -54,8 +54,6 @@ export function evaluate_binary_expr (binop: BinaryExpr, env: Environment): Runt
     }
     else if (leftHandSide.type == "html-string" && rightHandSide.type == "html-string") {
         return evaluate_html_string_expr(
-            leftHandSide as HtmlStringValue,
-            rightHandSide as HtmlStringValue,
             binop.operator
         );
     }
@@ -70,7 +68,6 @@ export function evaluate_binary_expr (binop: BinaryExpr, env: Environment): Runt
     }
 }
 
-
 export function evaluate_string_expr (leftHandSide: StringValue, rightHandSide: StringValue, operator: string): StringValue {
     if (operator === "+") {
         return {
@@ -81,16 +78,9 @@ export function evaluate_string_expr (leftHandSide: StringValue, rightHandSide: 
     throw new Error(`Interpreter Error: Unsupported operator ${operator} for strings`);
 }
 
-function evaluate_html_string_expr (leftHandSide: HtmlStringValue, rightHandSide: HtmlStringValue, operator: string): HtmlStringValue {
-    if (operator === "+") {
-        return {
-            type: "html-string",
-            value: leftHandSide.value + rightHandSide.value,
-        }
-    }
-    throw new Error(`Interpreter Error: Unsupported operator ${operator} for html strings`);
+function evaluate_html_string_expr (operator: string): HtmlStringValue {
+    throw new Error(`Interpreter Error: Unsupported operator ${operator} for html strings. They cannot be concatenated`);
 }
-
 
 export function evaluate_assignment (node: AssignmentExpression, env: Environment): RuntimeValue {
     if (node.assigne.kind !== "Identifier") {
