@@ -1,4 +1,4 @@
-import { MK_BOOL, MK_NATIVE_FN, MK_NULL, MK_NUMBER, type RuntimeValue } from "./values.js";
+import { MK_BOOL, MK_NATIVE_FN, MK_NULL, MK_STRING, type RuntimeValue } from "./values.js";
 
 export function createGlobalEnv () {
     const env = new Environment();
@@ -15,7 +15,7 @@ export function createGlobalEnv () {
     );
 
     function timeFunction (args: RuntimeValue[], _env: Environment) {
-        return MK_NUMBER(Date.now());
+        return MK_STRING((new Date().toISOString()));
     }
     env.declareVar("time", MK_NATIVE_FN(timeFunction), true);
 
@@ -23,9 +23,9 @@ export function createGlobalEnv () {
 }
 
 export default class Environment {
-    private parent?: Environment | undefined; 
-    private variables: Map<string, RuntimeValue>;
-    private constants: Set<string>
+    private readonly parent?: Environment | undefined; 
+    private readonly variables: Map<string, RuntimeValue>;
+    private readonly constants: Set<string>
 
     constructor(parentENV?: Environment) {
         const global = parentENV ? false : true;
@@ -37,7 +37,7 @@ export default class Environment {
 
     public declareVar(varname: string, value: RuntimeValue, constant: boolean): RuntimeValue {
         if (this.variables.has(varname)) {
-            throw `Cannot declare variable ${varname}. As it already is defined`;
+            throw new Error(`Cannot declare variable ${varname}. As it already is defined`);
         }
         this.variables.set(varname, value);
         if (constant) {
@@ -50,7 +50,7 @@ export default class Environment {
         const env = this.resolve(varname);
         // Cannot assign to a variable that is a constant
         if (env?.constants.has(varname)) {
-            throw `Cannot assign variable ${varname} as it is a constant.`;
+            throw new Error(`Cannot assign variable ${varname} as it is a constant.`);
         }
         env?.variables.set(varname, value);
         return value;
@@ -69,7 +69,7 @@ export default class Environment {
         }
 
         if (this.parent == undefined) {
-            throw `Cannot resolve variable ${varname} as it does not exist`;
+            throw new Error(`Cannot resolve variable ${varname} as it does not exist`);
         }
         // Else go the parent scope
         return this.parent.resolve(varname);

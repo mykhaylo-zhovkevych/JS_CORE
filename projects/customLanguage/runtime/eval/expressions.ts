@@ -1,7 +1,7 @@
 import type { AssignmentExpression, BinaryExpr, CallExpr, Identifier, MemberExpr, ObjectLiteral, VarDeclaration } from "../../frontend/ast.js";
 import Environment from "../environmnet.js";
 import { evaluate } from "../interpreter.js";
-import { MK_NULL, type FunctionValue, type NativeFunctionValue, type NumberValue, type ObjectValue, type RuntimeValue } from "../values.js";
+import { MK_NULL, type FunctionValue, type NativeFunctionValue, type NumberValue, type ObjectValue, type RuntimeValue, type StringValue } from "../values.js";
 
 function evaluate_numeric_expr (leftHandSide: NumberValue, rightHandSide: NumberValue, operator: string): NumberValue {
     switch (operator) {
@@ -44,15 +44,34 @@ export function evaluate_binary_expr (binop: BinaryExpr, env: Environment): Runt
             rightHandSide as NumberValue, 
             binop.operator
         );
-
-    } else {
+    }
+    else if (leftHandSide.type == "string" && rightHandSide.type == "string") {
+        return evaluate_string_expr(
+            leftHandSide as StringValue,
+            rightHandSide as StringValue,
+            binop.operator
+        );
+    }
+    else {
         return MK_NULL();
     }
 }
 
+
+export function evaluate_string_expr (leftHandSide: StringValue, rightHandSide: StringValue, operator: string): StringValue {
+    if (operator === "+") {
+        return {
+            type: "string",
+            value: leftHandSide.value + rightHandSide.value,
+        }
+    }
+    throw new Error(`Interpreter Error: Unsupported operator ${operator} for strings`);
+}
+
+
 export function evaluate_assignment (node: AssignmentExpression, env: Environment): RuntimeValue {
     if (node.assigne.kind !== "Identifier") {
-        throw "Cannot assign to non-identifier expressions.";
+        throw new Error("Cannot assign to non-identifier expressions.");
     }
     const varname = (node.assigne as Identifier).symbol;
     return env.assignVar(varname, evaluate(node.value, env));
@@ -140,5 +159,5 @@ export function evaluate_call_expr (expr: CallExpr, env: Environment): RuntimeVa
         return result;
     }
 
-    throw "Cannot call value that is not a function" + JSON.stringify(fn);
+    throw new Error("Cannot call value that is not a function: " + JSON.stringify(fn));
 }

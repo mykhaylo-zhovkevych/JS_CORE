@@ -15,14 +15,16 @@ export type NodeType =
 "ObjectLiteral"|
 "NumericLiteral" |
 "Identifier" |
-"BinaryExpression";
+"BinaryExpression" |
+"StringLiteral";
 
+
+export type StringQuote = '"' | "'";
 
 // abstract type
 export interface Stmt {
     kind: NodeType;
 }
-
 
 // expected to return some value
 export interface Expr extends Stmt {
@@ -63,7 +65,6 @@ export interface CallExpr extends Expr{
     kind: "CallExpression";
     args: Expr[],
     callee: Expr;
-    
 }
 
 export interface BinaryExpr extends Expr{
@@ -92,4 +93,12 @@ export interface Property extends Expr {
 export interface ObjectLiteral extends Expr {
     kind: "ObjectLiteral";
     properties: Property[];
+}
+
+
+export interface StringLiteral extends Expr {
+    kind: "StringLiteral";
+    value: string;
+    quote: StringQuote;
+    class: string[];
 }

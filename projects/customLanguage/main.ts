@@ -5,7 +5,7 @@ import { evaluate } from "./runtime/interpreter.js";
 import Environment, { createGlobalEnv } from "./runtime/environmnet.js";
 
 
-repl();
+await repl();
 
 async function repl () {
     const parser = new Parser();

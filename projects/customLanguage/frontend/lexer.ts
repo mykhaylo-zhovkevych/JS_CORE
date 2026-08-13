@@ -8,6 +8,8 @@ export enum TokenType {
     Number,
     Identifier,
     String,
+    DoubleQuote,
+    SingleQuote,
 
     Equals,
     Comma, Colon, // :
@@ -37,6 +39,16 @@ export interface Token {
     type: TokenType
 }
 
+export type StringQuote = '"' | "'";
+
+export function quoteFromTokenType (type: TokenType.DoubleQuote | TokenType.SingleQuote): StringQuote {
+    return type === TokenType.DoubleQuote ? '"' : "'";
+}
+
+export function isStringTokenType (type: TokenType): type is TokenType.DoubleQuote | TokenType.SingleQuote {
+    return type === TokenType.DoubleQuote || type === TokenType.SingleQuote;
+}
+
 function token (value: string, type: TokenType): Token {
     return { value, type }
 }
@@ -54,6 +66,22 @@ function isint (src: string) {
     const lower = '0'.charCodeAt(0);
     const upper = '9'.charCodeAt(0);
     return (c >= lower && c <= upper); // greater or less than unicode of 0 and 9
+}
+
+function readDataStringLiteral( src: string[], quote: '"' | "'"): string {
+    let value = "";
+
+    src.shift(); // opening quote
+
+    if (src.length === 0) {
+        throw new Error("Unterminated string literal");
+    }
+    while (src.length > 0 && src[0] !== quote) {
+        value += src.shift();
+    }
+    
+    src.shift(); // closing quote
+    return value;
 }
 
 export function tokenize(sourceCode: string): Token[] {
@@ -77,9 +105,7 @@ export function tokenize(sourceCode: string): Token[] {
         }
         else if (current == '}') {
             tokens.push(token(src.shift()!, TokenType.CloseBrace));
-        } else if (current == ')') {
-            tokens.push(token(src.shift()!, TokenType.CloseParen));
-        }
+        } 
         else if (current == '[') {
             tokens.push(token(src.shift()!, TokenType.OpenBracket));
         } else if (current == ']') {
@@ -102,6 +128,13 @@ export function tokenize(sourceCode: string): Token[] {
         }
         else if (current == ',') {
             tokens.push(token(src.shift()!, TokenType.Comma));
+        }
+        else if (current == '"' || current == "'") {
+            const quote = current as StringQuote;
+            const tokenType = quote === '"' ? TokenType.DoubleQuote : TokenType.SingleQuote;
+            
+            const value = readDataStringLiteral(src, quote);
+            tokens.push(token(value, tokenType));
         }
         else {
             // handles multi character tokes

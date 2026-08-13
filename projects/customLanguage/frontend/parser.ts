@@ -1,6 +1,6 @@
 // It takes the tokens from the lexer and understands their structure (meaning)
-import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property, CallExpr, MemberExpr, FunctionDeclaration } from "./ast.js";
-import { tokenize, TokenType, type Token } from "./lexer.js";
+import type { Stmt, Program, Expr, BinaryExpr, NumericLiteral, Identifier, VarDeclaration, AssignmentExpression, ObjectLiteral, Property, CallExpr, MemberExpr, FunctionDeclaration, StringLiteral } from "./ast.js";
+import { tokenize, TokenType, isStringTokenType, quoteFromTokenType, type Token } from "./lexer.js";
 
 export default class Parser {
 
@@ -365,10 +365,25 @@ export default class Parser {
             case TokenType.Number: {
                 const numericLiteral: NumericLiteral = {
                     kind: "NumericLiteral",
-                    value: parseFloat(this.eat().value),
+                    value: Number.parseFloat(this.eat().value),
                 };
 
                 return numericLiteral;  
+            }
+
+            case TokenType.DoubleQuote:
+            case TokenType.SingleQuote: {
+                const stringToken = this.eat();
+                if (!isStringTokenType(stringToken.type)) {
+                    throw new Error("Expected a string literal token");
+                }
+                const stringLiteral: StringLiteral = {
+                    kind: "StringLiteral",
+                    value: stringToken.value,
+                    quote: quoteFromTokenType(stringToken.type),
+                    class: [],
+                };
+                return stringLiteral;
             }
 
             case TokenType.OpenParen: {
