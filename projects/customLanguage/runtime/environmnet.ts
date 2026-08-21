@@ -59,17 +59,16 @@ export function createGlobalEnv () {
         const target = args.length > 0 ? filenameFromArg(args[0]!) : DEFAULT_OUTPUT_FILE;
 
         const sections: string[] = [];
-        for (const [varname, value] of env.flatten()) {
+        for (const [, value] of env) {
             if (value.type !== "html-string") {
                 continue; // plain strings, numbers and the builtins are not markup
             }
-            sections.push(`    <!-- ${varname} -->\n    ${(value as HtmlStringValue).value}`);
+            sections.push(`    ${(value as HtmlStringValue).value}`);
         }
 
         const path = resolve(process.cwd(), target);
         writeFileSync(path, renderDocument(sections), "utf8");
 
-        //console.log(`Wrote ${sections.length} html value(s) to ${path}`);
         return MK_STRING(path);
     }
 
@@ -119,13 +118,20 @@ export default class Environment {
         return env!.variables.get(varname) as RuntimeValue;
     }
 
-    // Done with claude
-    public flatten (): Map<string, RuntimeValue> {
-        const collected = this.parent ? this.parent.flatten() : new Map<string, RuntimeValue>();
-        for (const [varname, value] of this.variables) {
-            collected.set(varname, value);
+
+    public *[Symbol.iterator](): IterableIterator<[string, RuntimeValue]> {
+        const seen = new Set<string>();
+
+        // c like for loop to traverse the scope of the environments to find a variable. assigning a x but x exist in the global scope, traverse through the parent environments
+        for ( let env: Environment | undefined = this; env; env = env.parent) 
+            {
+            for (const entry of env.variables) {
+                if (!seen.has(entry[0])) {
+                    seen.add(entry[0]);
+                    yield entry;
+                }
+            }
         }
-        return collected;
     }
 
     // traversing the scope of the environments to find a variable. assigning a x but x exist in the global scope, traverse through the parent environments

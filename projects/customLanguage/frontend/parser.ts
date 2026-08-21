@@ -378,7 +378,6 @@ export default class Parser {
                 const stringLiteral: StringDoubleQuote = {
                     kind: "StringLiteralDouble",  
                     value: stringToken.value,
-                    class: [],
                 };
                 return stringLiteral;
             };
@@ -392,7 +391,6 @@ export default class Parser {
                 const stringLiteral: StringSingleQuote = {
                     kind: "StringLiteralSingle",
                     value: stringToken.value,
-                    class: [],
                 };
                 return stringLiteral;
             };

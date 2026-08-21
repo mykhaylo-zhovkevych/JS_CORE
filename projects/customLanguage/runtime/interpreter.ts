@@ -1,5 +1,4 @@
 // The interpreter walks through this structure and performs actions:
-
 import {type RuntimeValue, type NumberValue, MK_NULL, MK_STRING, MK_HTML_STRING} from "./values.js";
 import type { AssignmentExpression, BinaryExpr, CallExpr, FunctionDeclaration, Identifier, MemberExpr, NumericLiteral, ObjectLiteral, Program, Stmt, StringDoubleQuote, StringSingleQuote, VarDeclaration } from "#frontend/ast";
 import type Environment from "./environmnet.js";

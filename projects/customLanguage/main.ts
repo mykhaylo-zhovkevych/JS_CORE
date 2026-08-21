@@ -2,7 +2,7 @@ import Parser from "#frontend/parser";
 import { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { evaluate } from "#runtime/interpreter";
-import { createGlobalEnv } from "#runtime/environmnet";
+import Environment, { createGlobalEnv } from "#runtime/environmnet";
 
 
 await repl();
