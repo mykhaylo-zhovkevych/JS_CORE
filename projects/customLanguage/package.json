@@ -13,6 +13,16 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "imports": {
+    "#frontend/*": {
+      "types": "./frontend/*.ts",
+      "default": "./dist/frontend/*.js"
+    },
+    "#runtime/*": {
+      "types": "./runtime/*.ts",
+      "default": "./dist/runtime/*.js"
+    }
+  },
   "devDependencies": {
     "@types/node": "^25.5.0",
     "typescript": "^6.0.2"

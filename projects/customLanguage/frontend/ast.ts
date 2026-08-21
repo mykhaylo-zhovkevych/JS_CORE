@@ -94,15 +94,12 @@ export interface ObjectLiteral extends Expr {
     properties: Property[];
 }
 
-// class probably not needed
 export interface StringDoubleQuote extends Expr {
     kind: "StringLiteralDouble";
     value: string;
-    class: string[];
 }
 
 export interface StringSingleQuote extends Expr {
     kind: "StringLiteralSingle";
     value: string;
-    class: string[];
 }

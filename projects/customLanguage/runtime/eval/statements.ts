@@ -1,7 +1,7 @@
-import type { FunctionDeclaration, Program, VarDeclaration } from "../../frontend/ast.js";
-import type Environment from "../environmnet.js";
-import { evaluate } from "../interpreter.js";
-import { MK_NULL, type FunctionValue, type RuntimeValue } from "../values.js";
+import type { FunctionDeclaration, Program, VarDeclaration } from "#frontend/ast";
+import type Environment from "#runtime/environmnet";
+import { evaluate } from "#runtime/interpreter";
+import { MK_NULL, type FunctionValue, type RuntimeValue } from "#runtime/values";
 
 export function evaluate_program (program: Program, env: Environment): RuntimeValue {
     let lastEvaluated: RuntimeValue = MK_NULL();

@@ -1,4 +1,4 @@
-import type { Stmt } from "../frontend/ast.js";
+import type { Stmt } from "#frontend/ast";
 import Environment from "./environmnet.js";
 export type ValueType = "null" | "number" | "boolean" | "string" | "html-string" | "object" | "native-fn" | "function";
 export type FunctionCall = (args: RuntimeValue[], env: Environment) => RuntimeValue;
