@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Ziegenproblem</title>
+</head>
+<body>
+    <div class="game">
+
+        <h1>Ziegenproblem</h1>
+
+        <h2>Welche Variante würdest du auswählen?</h2>
+
+        <div id="buttons">
+
+            <button data-target="1">
+                Option One
+            </button>
+
+            <button data-target="2">
+                Option Two
+            </button>
+
+            <button data-target="3">
+                Option Three
+            </button>
+
+        </div>
+
+        <form method="post">
+
+            <label for="repeat">
+                Willst du es wiederholen?
+            </label>
+
+            <input type="checkbox" id="repeat">
+
+            <button type="button" id="reset">
+                Wiederholen
+            </button>
+
+        </form>
+
+        <span id="result"></span>
+    </div>
+
+
+    <script>
+        // Consts
+        const REVEAL_DELAY = 3000;
+        const REPEAT_DELAY = 4500;
+
+        function getRandomInt(value) {
+
+            return Math.floor(Math.random() * value);
+        }
+
+        function generateData() {
+
+            const array = new Map();
+
+            /*
+                Example:
+
+                1 -> button1
+                2 -> buttonn2
+                3 -> button3
+
+                "buttonn" = winning button
+            */
+
+            while (array.size < 3) {
+
+                let int = getRandomInt(3);
+
+                // Protect against duplicates
+                if (array.has(int)) {
+                    continue;
+                }
+
+                array.set(int, `button${int}`);
+
+            }
+
+            const winningNumber = getRandomInt(3);
+
+            // Double verification
+            if (array.has(winningNumber)) {
+
+                array.set(
+                    winningNumber,
+                    `buttonn${winningNumber}`
+                );
+
+            }
+
+            return array;
+
+        }
+
+        // true when the picked id is the winning door
+        function checkGeneratedValue(id) {
+
+            return array.get(id) === `buttonn${id}`;
+        }
+
+
+        const bth = document.getElementById("buttons");
+        const result = document.getElementById("result");
+        const reset = document.getElementById("reset");
+
+        const repeat = document.getElementById("repeat");
+        const optionButtons = bth.querySelectorAll("button");
+
+        // Global state for the current round
+        let array = generateData();
+        let gameOver = false;
+   
+        let pendingTimeout = null;
+
+
+        function startNewRound() {
+
+            // Cancel whatever was scheduled (a pending reveal or auto-repeat)
+            clearTimeout(pendingTimeout);
+            pendingTimeout = null;
+
+            array = generateData();
+            gameOver = false;
+            result.textContent = "";
+
+            // Preventing the user from clicking on the buttons while the round is in progress
+            for (const button of optionButtons) {
+                button.disabled = false;
+            }
+
+        }
+
+        function endRound(won) {
+
+            gameOver = true;
+
+            for (const button of optionButtons) {
+                button.disabled = true;
+            }
+
+            clearTimeout(pendingTimeout);
+            pendingTimeout = setTimeout(() => {
+
+                result.textContent = won ? "Du hast gewonnen!" : "Du hast verloren!";
+
+                // only repeat automatically if the checkbox is ticked
+                if (repeat.checked) {
+                    pendingTimeout = setTimeout(startNewRound, REPEAT_DELAY);
+                }
+
+            }, REVEAL_DELAY);
+        }
+
+
+        bth.addEventListener("click", (event) => {
+
+            // Protection against clicking on the buttons when the round is over
+            if (event.target.tagName !== "BUTTON" || gameOver) {
+                return;
+            }
+
+            const ident = Number(event.target.dataset.target);
+
+            endRound(checkGeneratedValue(ident));
+        });
+
+
+        // Manual reset for debugging/testing: cancels the pending timeout and
+        reset.addEventListener("click", () => {
+
+            if (!repeat.checked) {
+                result.textContent = "Bitte zuerst \"Willst du es wiederholen?\" ankreuzen.";
+                return;
+            }
+
+            startNewRound();
+        });
+    </script>
+
+    
+</body>
+</html>
