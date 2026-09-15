@@ -1,35 +1,39 @@
+const PALETTE_SIZE = 6;
+const COPY_FEEDBACK_MS = 1500;
+
 const generateBth = document.getElementById('generate-btn');
 const paletteContainer = document.querySelector('.palette-container');
-// const copyBth = document.querySelector('.copy-bth');
+const boxTemplate = document.getElementById('color-box-template');
 
 generateBth.addEventListener('click', generatePalette);
-paletteContainer.addEventListener('click', (e) => {
-    if (e.target.classList.contains("copy-bth")) {
-        // This previousElementSibling select the previous sibling element
-        const hexValue = e.target.previousElementSibling.textContent;
+paletteContainer.addEventListener('click', handleCopyClick);
+generatePalette();
 
-        navigator.clipboard
-            .writeText(hexValue)
-            .then(() => showCopySuccess(e.target))
-            .catch((e) => alert("Failed to copy color code: ", e));
-    } else if (e.target.classList.contains("color")) {
-        // Inside of the color div go the next sibling element and select the hex value
-        const hexValue = e.target.nextElementSibling.querySelector(".hex-value").textContent;
 
-        navigator.clipboard
-            .writeText(hexValue)
-            .then(() => showCopySuccess(e.target.nextElementSibling.querySelector(".copy-bth")))
-            .catch((e) => alert("Failed to copy color code: ", e));
-    }
-});
+// Event handlers
+function handleCopyClick(e) {
+    const box = e.target.closest(".color-box");
+    if (!box) return;
 
+    // Only react to clicks on the swatch or the copy button
+    if (!e.target.closest(".copy-bth") && !e.target.closest(".color")) return;
+
+    const button = box.querySelector(".copy-bth");
+    const hexValue = button.dataset.color;
+
+    navigator.clipboard
+        .writeText(hexValue)
+        .then(() => showCopySuccess(button))
+        .catch((err) => alert("Failed to copy color code: " + err));
+}
+
+// Utility functions
 function generatePalette() {
     const colors = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < PALETTE_SIZE; ++i) {
         colors.push(generateRandomColor());
     }
-
-    updatePaletteDisplay(colors);
+    renderPalette(colors);
 }
 
 function generateRandomColor() {
@@ -42,29 +46,32 @@ function generateRandomColor() {
     return color;
 }
 
-function updatePaletteDisplay(colors) {
-    const colorBoxes = document.querySelectorAll('.color-box');
-    colorBoxes.forEach((box, index) => {
-        const color = colors[index];
-        const colorDiv = box.querySelector(".color");
-        const hexValue = box.querySelector(".hex-value");
+// Render functions
+function renderPalette(colors) {
+    const boxes = colors.map(createColorBox);
+    paletteContainer.replaceChildren(...boxes); 
+}
 
-        colorDiv.style.backgroundColor = color;
-        hexValue.textContent = color;
-    });
+function createColorBox(color) {
+    const box = boxTemplate.content.firstElementChild.cloneNode(true);
+
+    box.querySelector(".color").style.backgroundColor = color;
+    box.querySelector(".hex-value").textContent = color;
+    box.querySelector(".copy-bth").dataset.color = color;
+
+    return box;
 }
 
 function showCopySuccess(button) {
-    button.classList.remove("far", "fa-copy");
-    button.classList.add("fas", "fa-check");
-    button.style.color = "#48nn78";
+    const icon = button.querySelector("i");
 
+    icon.classList.replace("far", "fas");
+    icon.classList.replace("fa-copy", "fa-check");
+    button.classList.add("copied");
+    
     setTimeout(() => {
-        button.classList.remove("fas", "fa-check");
-        button.classList.add("far", "fa-copy");
-        button.style.color = "";
-    }, 1500)
+        icon.classList.replace("fas", "far");
+        icon.classList.replace("fa-check", "fa-copy");
+        button.classList.remove("copied");
+    }, COPY_FEEDBACK_MS)
 }
-
-
-generatePalette();

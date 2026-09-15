@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root {
+    --primary: #667eea;
+    --primary-dark: #764ba2;
+    --text: #333;
+    --muted: #64758b;
+    --success: #48bb78;
+    --surface: #fff;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,18 +17,16 @@
 }
 
 body {
-    background: linear-gradient(135deg, #83a8df,#c3cfe2);
+    background: linear-gradient(135deg, #83a8df, #c3cfe2);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-
 }
 
-
 .container {
-    background-color: #fff;
+    background-color: var(--surface);
     border-radius: 1rem;
     padding: 2rem;
     width: 100%;
@@ -27,15 +34,16 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+h2 {
     text-align: center;
     margin-bottom: 1.5rem;
-    color: #333;
+    color: var(--text);
+    font-size: 1.75rem;
     position: relative;
     padding-bottom: 0.5rem;
 }
 
-h1::after  {
+h2::after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -44,30 +52,38 @@ h1::after  {
     transform: translateX(-50%);
     width: 50%;
     height: 3px;
-    background-color: #667eea;
+    background-color: var(--primary);
     border-radius: 2px;
 }
 
-
 #generate-btn {
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 500;
-  margin-bottom: 2rem;
-  font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 auto 2rem;
+    background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #generate-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 10px rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(102, 126, 234, 0.3);
 }
 
 #generate-btn:active {
-  transform: translateY(0);
+    transform: translateY(0);
+}
+
+#generate-btn:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
 }
 
 .palette-container {
@@ -80,11 +96,12 @@ h1::after  {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .color-box:hover {
     transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .color {
@@ -93,32 +110,58 @@ h1::after  {
 }
 
 .color-info {
-    background-color: #fff;
+    background-color: var(--surface);
     padding: 0.7rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.5rem;
     font-size: 0.9rem;
 }
 
 .hex-value {
     font-weight: 500;
     letter-spacing: 0.5px;
+    color: var(--text);
 }
 
+/* Reset native button look so it behaves like the old icon */
 .copy-bth {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    line-height: 1;
     cursor: pointer;
-    color: #64758b;
-    transition: color 0.2s ease;
+    color: var(--muted);
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .copy-bth:hover {
-    color: #667eea;
+    color: var(--primary);
+    background-color: rgba(102, 126, 234, 0.1);
 }
 
-@media (max-width:768px) {
+.copy-bth:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Toggled by showCopySuccess() in script.js */
+.copy-bth.copied {
+    color: var(--success);
+}
+
+@media (max-width: 768px) {
     .palette-container {
         grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     }
-    
+
+    .color {
+        height: 100px;
+    }
 }
