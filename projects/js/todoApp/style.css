@@ -119,7 +119,7 @@ header p {
     font-weight: 600;
 }
 
-.todos-container {
+.list-wrapper {
     padding: 15px 0;
     max-height: 300px;
     overflow-y: auto;
