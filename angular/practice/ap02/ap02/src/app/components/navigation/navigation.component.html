@@ -1,0 +1,14 @@
+<ul class="mb-6 flex gap-2">
+  <li>
+    <a [routerLink]="['/simple']" routerLinkActive="active">Simple</a>
+  </li>
+  <li>
+    <a [routerLink]="['/advanced']" routerLinkActive="active">Advanced</a>
+  </li>
+  <li>
+    <!-- no route yet: falls through to '**' until an ObjectList component exists -->
+    <a [routerLink]="['/object-list']" routerLinkActive="active">
+      Object list
+    </a>
+  </li>
+</ul>
