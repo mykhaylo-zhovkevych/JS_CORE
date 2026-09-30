@@ -1,0 +1,25 @@
+<section class="w-96 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+  <h2 class="mb-4 text-lg font-semibold text-slate-800">Simple</h2>
+
+  <div class="mb-4 flex gap-2">
+    <input type="number" [(ngModel)]="calc.first"
+           class="w-full rounded-md border border-slate-300 px-3 py-2 text-right tabular-nums focus:outline-none focus:ring-2 focus:ring-blue-200" />
+    <input type="number" [(ngModel)]="calc.second"
+           class="w-full rounded-md border border-slate-300 px-3 py-2 text-right tabular-nums focus:outline-none focus:ring-2 focus:ring-blue-200" />
+  </div>
+
+  <div class="mb-4 grid grid-cols-4 gap-2">
+    <!-- track is the identity rule for the @for loop — it tells Angular how to recognise the same item again on the next render, so it can reuse DOM nodes instead of rebuilding them    -->
+    @for (op of calc.operations; track op) {
+      <button (click)="calc.calculate(op)"
+              class="rounded-md bg-blue-600 py-2 font-mono text-lg text-white transition hover:bg-blue-700 active:scale-95">
+        {{ op }}
+      </button>
+    }
+  </div>
+
+  <!-- interpolation -->
+  <p class="rounded-md bg-slate-100 px-3 py-2 text-right font-mono text-xl tabular-nums text-slate-900">
+    {{ calc.last ?? '—' }}
+  </p>
+</section>

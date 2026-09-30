@@ -1,0 +1,15 @@
+a {
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  color: #334155;
+  text-decoration: none;
+
+  &:hover { background: #e2e8f0; }
+
+  // added by routerLinkActive while the link's route is the current one
+  &.active {
+    background: #0f172a;
+    color: #fff;
+  }
+}
