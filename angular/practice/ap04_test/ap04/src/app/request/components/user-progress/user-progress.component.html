@@ -1,0 +1,39 @@
+<section class="panel">
+    <header class="panel__header">
+        <h2>Users · todo progress</h2>
+        <p>
+            <code>userProgress$ | async</code> → <code>percent</code>, <code>uppercase</code>, <code>initials</code>.
+            Users and posts come from the same cached requests the post list uses.
+        </p>
+    </header>
+
+    @if (rows$ | async; as rows) {
+        <ol class="rows">
+            @for (row of rows; track row.user.id) {
+                <!-- --progress (0..1) and data-level drive the bar in the scss -->
+                <li class="row" [attr.data-level]="row.level" [style.--progress]="row.completion">
+                    <span class="row__avatar">{{ row.user.name | initials }}</span>
+
+                    <div class="row__name">
+                        <strong>{{ row.user.name }}</strong>
+                        <span class="row__company">{{ row.user.company.name | uppercase }}</span>
+                    </div>
+
+                    <div class="row__meta">
+                        {{ row.postCount }} posts ({{ row.postShare | percent }}) ·
+                        {{ row.todosDone }}/{{ row.todosTotal }} todos done
+                    </div>
+
+                    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                         [attr.aria-valuenow]="row.completion * 100">
+                        <div class="bar__fill"></div>
+                    </div>
+
+                    <span class="row__badge">{{ row.completion | percent: '1.0-0' }}</span>
+                </li>
+            }
+        </ol>
+    } @else {
+        <p class="state">Loading users…</p>
+    }
+</section>

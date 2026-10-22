@@ -1,0 +1,156 @@
+// =====================================================================
+// USE CASE 01 — responsive card grid generated from a Sass map
+// ---------------------------------------------------------------------
+// The template sets  [attr.data-accent]="post.userId % 5"  (0..4) on every card.
+//
+// What this file shows:
+//   1. Sass map + @each    -> generates one color modifier per accent key
+//   2. @mixin with params  -> reusable shadow ("elevation") for rest + hover
+//   3. @mixin + @content   -> breakpoint helper, the caller passes the rules
+//   4. & nesting (BEM)     -> .card, .card__title ... without repeating names
+//   5. grid auto-fill      -> number of columns follows the available width
+// =====================================================================
+
+@use 'sass:map';
+@use 'sass:color';
+
+// (1) the keys match the values of data-accent in the template
+$accents: (
+  0: #4f46e5,
+  1: #0891b2,
+  2: #16a34a,
+  3: #d97706,
+  4: #db2777,
+);
+
+$breakpoints: (
+  sm: 600px,
+  lg: 1024px,
+);
+
+// (3) @include up(sm) { ... }  compiles to  @media (min-width: 600px) { ... }
+//     @content is the placeholder for whatever is inside the { } of the @include
+@mixin up($name) {
+  @media (min-width: map.get($breakpoints, $name)) {
+    @content;
+  }
+}
+
+// (2) higher level = bigger, softer shadow
+//     elevation(1) -> 0 1px 3px ...   elevation(4) -> 0 4px 12px ...
+@mixin elevation($level) {
+  box-shadow:
+    0 #{$level}px #{$level * 3}px rgba(15, 23, 42, 0.05 * $level),
+    0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+// (5) 1 column on phones, then as many 260px+ columns as fit
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @include up(sm) {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+
+  @include up(lg) {
+    gap: 1.5rem;
+  }
+}
+
+// (4) every "&" below is replaced by ".card"  ->  &__title = .card__title
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  border-radius: 12px;
+  border-top: 4px solid var(--accent);
+  @include elevation(1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    @include elevation(4);
+  }
+
+  // (1) the loop — compiles to 5 rules:
+  //     .card[data-accent="0"] { --accent: #4f46e5; --accent-soft: rgba(79, 70, 229, .12) }
+  //     ...
+  //     the children below only read the CSS variables, so they never need to know the color
+  @each $key, $color in $accents {
+    &[data-accent='#{$key}'] {
+      --accent: #{$color};
+      --accent-soft: #{color.change($color, $alpha: 0.12)};
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  &__author {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+
+    small {
+      color: var(--muted);
+    }
+  }
+
+  &__id {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  &__body {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  // margin-top: auto pushes the footer to the bottom, so all cards in a row line up
+  &__footer {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

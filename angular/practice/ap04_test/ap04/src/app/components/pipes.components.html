@@ -1,0 +1,84 @@
+<section class="panel">
+    <header class="panel__header">
+        <h2>Built-in & custom pipes</h2>
+        <p>Left: the expression in the template. Right: what Angular renders.</p>
+    </header>
+
+    <h3>Text</h3>
+    <dl class="demo">
+        <dt><code>name | uppercase</code></dt>
+        <dd>{{ name | uppercase }}</dd>
+
+        <dt><code>surname | lowercase</code></dt>
+        <dd>{{ surname | lowercase }}</dd>
+
+        <!-- chaining: the output of one pipe is the input of the next -->
+        <dt><code>(name + ' ' + surname) | lowercase | titlecase</code></dt>
+        <dd>{{ (name + ' ' + surname) | lowercase | titlecase }}</dd>
+
+        <dt><code>sentence | slice: 0 : 22</code></dt>
+        <dd>{{ sentence | slice: 0 : 22 }}</dd>
+    </dl>
+
+    <h3>Date</h3>
+    <dl class="demo">
+        <dt><code>date | date</code></dt>
+        <dd>{{ date | date }}</dd>
+
+        <dt><code>date | date: 'dd.MM.yyyy'</code></dt>
+        <dd>{{ date | date: 'dd.MM.yyyy' }}</dd>
+
+        <dt><code>date | date: 'EEEE, d. MMMM y, HH:mm'</code></dt>
+        <dd>{{ date | date: 'EEEE, d. MMMM y, HH:mm' }}</dd>
+
+        <dt><code>date | date: 'shortTime'</code></dt>
+        <dd>{{ date | date: 'shortTime' }}</dd>
+    </dl>
+
+    <h3>Numbers</h3>
+    <dl class="demo">
+        <dt><code>price | currency</code></dt>
+        <dd>{{ price | currency }}</dd>
+
+        <dt><code>price | currency: 'EUR'</code></dt>
+        <dd>{{ price | currency: 'EUR' }}</dd>
+
+        <dt><code>price | currency: 'CHF' : 'code'</code></dt>
+        <dd>{{ price | currency: 'CHF' : 'code' }}</dd>
+
+        <dt><code>rate | percent</code></dt>
+        <dd>{{ rate | percent }}</dd>
+
+        <!-- digitsInfo = minInt.minFrac-maxFrac -->
+        <dt><code>rate | percent: '1.1-2'</code></dt>
+        <dd>{{ rate | percent: '1.1-2' }}</dd>
+
+        <dt><code>bigNumber | number: '1.0-1'</code></dt>
+        <dd>{{ bigNumber | number: '1.0-1' }}</dd>
+    </dl>
+
+    <h3>Objects & arrays</h3>
+    <dl class="demo">
+        <dt><code>tags | slice: 1 : 3</code></dt>
+        <dd>{{ tags | slice: 1 : 3 }}</dd>
+
+        <dt><code>profile | json</code></dt>
+        <dd><pre>{{ profile | json }}</pre></dd>
+
+        <dt><code>&#64;for (item of profile | keyvalue)</code></dt>
+        <dd>
+            @for (item of profile | keyvalue; track item.key) {
+                <span class="chip">{{ item.key }}: {{ item.value }}</span>
+            }
+        </dd>
+    </dl>
+
+    <h3>Custom (src/app/pipes)</h3>
+    <dl class="demo">
+        <dt><code>(name + ' ' + surname) | initials</code></dt>
+        <dd>{{ (name + ' ' + surname) | initials }}</dd>
+
+        <dt><code>sentence | truncate: 30</code></dt>
+        <dd>{{ sentence | truncate: 30 }}</dd>
+    </dl>
+</section>

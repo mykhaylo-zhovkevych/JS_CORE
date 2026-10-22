@@ -1,0 +1,153 @@
+// =====================================================================
+// USE CASE 02 — data-driven progress bars (Angular -> CSS variable -> Sass)
+// ---------------------------------------------------------------------
+// The template binds two things on every <li class="row">:
+//   [style.--progress]="row.completion"   a number 0..1   (changes per user)
+//   [attr.data-level]="row.level"          'low' | 'mid' | 'high'
+//
+// What this file shows:
+//   1. @function              -> helper that returns a value (px -> rem)
+//   2. map + @each + sass:color -> one color theme per level, light shades computed
+//   3. %placeholder + @extend -> shared "pill" styles without an extra class in the html
+//   4. calc() with a CSS var  -> the bar width comes straight from the data
+//   5. grid-template-areas    -> different layout on phone vs desktop, same html
+//   6. @keyframes + prefers-reduced-motion
+// =====================================================================
+
+@use 'sass:math';
+@use 'sass:color';
+
+// (1) rem(40) -> 2.5rem   (math.div is the modern replacement for "/")
+@function rem($px) {
+  @return math.div($px, 16) * 1rem;
+}
+
+// (2) the keys match ProgressLevel in post.model.ts
+$levels: (
+  low: #dc2626,
+  mid: #d97706,
+  high: #16a34a,
+);
+
+// (3) a placeholder never ends up in the css on its own,
+//     only the selectors that @extend it are grouped together:
+//     .row__avatar, .row__badge { display: inline-flex; ... }
+%pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rows {
+  display: grid;
+  gap: rem(8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  // (5) phone: 3 columns, bar + meta get their own line
+  display: grid;
+  grid-template-columns: rem(40) minmax(0, 1fr) auto;
+  grid-template-areas:
+    'avatar name badge'
+    'bar    bar  bar'
+    'meta   meta meta';
+  align-items: center;
+  gap: rem(6) rem(12);
+  padding: rem(12) rem(16);
+  border: 1px solid var(--border);
+  border-left: rem(4) solid var(--level);
+  border-radius: rem(10);
+  background: var(--surface);
+
+  // (2) compiles to 3 rules, e.g. for 'high':
+  //     .row[data-level=high] { --level: #16a34a; --level-light: <15% lighter>; --level-bg: <very light> }
+  @each $name, $color in $levels {
+    &[data-level='#{$name}'] {
+      --level: #{$color};
+      --level-light: #{color.adjust($color, $lightness: 15%)};
+      --level-bg: #{color.scale($color, $lightness: 88%)};
+    }
+  }
+
+  // (5) desktop: everything on one line
+  @media (min-width: 800px) {
+    grid-template-columns: rem(40) minmax(12rem, 1fr) minmax(14rem, 1.2fr) minmax(8rem, 1fr) rem(56);
+    grid-template-areas: 'avatar name meta bar badge';
+  }
+
+  &__avatar {
+    @extend %pill;
+    grid-area: avatar;
+    width: rem(40);
+    height: rem(40);
+    background: var(--bg);
+    font-size: rem(13);
+  }
+
+  &__name {
+    grid-area: name;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+  }
+
+  &__company {
+    font-size: rem(11);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  &__meta {
+    grid-area: meta;
+    font-size: rem(13);
+    color: var(--muted);
+  }
+
+  &__badge {
+    @extend %pill;
+    grid-area: badge;
+    padding: rem(2) rem(10);
+    background: var(--level-bg);
+    color: var(--level);
+    font-size: rem(12);
+  }
+}
+
+.bar {
+  grid-area: bar;
+  height: rem(10);
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+
+  &__fill {
+    height: 100%;
+    // (4) --progress is set by Angular on the parent .row and inherited here
+    //     0.62 * 100% = 62% width — no Sass needed at runtime
+    width: calc(var(--progress, 0) * 100%);
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--level-light), var(--level));
+    transform-origin: left;
+    animation: grow 0.8s ease-out both;
+  }
+}
+
+// (6) bars "fill up" once when the data arrives
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar__fill {
+    animation: none;
+  }
+}
