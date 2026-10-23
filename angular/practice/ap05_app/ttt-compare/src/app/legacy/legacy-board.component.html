@@ -1,0 +1,25 @@
+{{ count() }} 
+<h2>
+    Legacy
+</h2>
+<p class="tech">
+NgModule, constructor DI, RxJS, &#64;Input/&#64;Output, *ngIf/*ngFor, Eager
+</p>
+
+<p class="status">
+  <ng-container *ngIf="winner; else noWinner">Winner: {{ winner }}</ng-container>
+  <ng-template #noWinner>{{ draw ? 'Draw' : timeUp ? "Time's up" : 'Next: ' + next }}</ng-template>
+</p>
+
+<p class="clock">Time: {{ seconds }} s</p>
+
+<div class="board">
+    <legacy-cell
+    *ngFor="let cell of board; let i = index; trackBy: trackByIndex"
+    [value]="cell"
+    (play)="onPlay(i)"
+    >
+    </legacy-cell>
+</div>
+
+<button class="reset" (click)="reset()">New Game</button>

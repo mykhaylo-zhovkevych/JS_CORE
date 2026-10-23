@@ -1,0 +1,21 @@
+{{ count() }}
+<h2>Modern</h2>
+<p class="tech">standalone, inject(), signals, input()/output(), &#64;if/&#64;for, OnPush</p>
+
+<p class="status">
+    @if (game.winner(); as winner) {
+        Winner: {{ winner }}
+    } @else if (game.draw()) {
+        Draw
+    } @else {
+        Next: {{ game.next() }}
+    }
+</p>
+<p class="clock">Time: {{ seconds() }}s</p>
+
+<div class="board">
+    @for (cell of game.board(); track $index) {
+        <modern-cell [value]="cell" (play)="game.play($index)" />
+    }
+</div>
+<button class="reset" (click)="reset()"> New Game </button>

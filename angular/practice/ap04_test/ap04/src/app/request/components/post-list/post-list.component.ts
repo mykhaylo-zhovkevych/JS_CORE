@@ -21,6 +21,7 @@ export class PostListComponent {
     readonly limit = signal(6);
 
     showMore() {
+        debugger;
         this.limit.update(n => n + 6);
     }
 }

@@ -1,0 +1,118 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --ink: #1f2a37;
+  --line: #cfd6df;
+  --legacy: #9a6b2f;
+  --modern: #2f6f9a;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  color: var(--ink);
+  margin: 2rem 2rem 2rem 5rem;
+  max-width: 60rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.games section {
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.legacy {
+  border-color: var(--legacy) !important;
+}
+
+.modern {
+  border-color: var(--modern) !important;
+}
+
+.legacy h2 {
+  color: var(--legacy);
+}
+
+.modern h2 {
+  color: var(--modern);
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.tech {
+  font-size: 0.8rem;
+  color: #5b6573;
+  margin-top: 0.25rem;
+}
+
+.status {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.clock {
+  margin-top: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 4rem);
+  gap: 4px;
+  margin: 1rem 0;
+}
+
+.cell {
+  width: 4rem;
+  height: 4rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: #f3f5f8;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cell:hover:not(:disabled) {
+  background: #e3e8ef;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--modern);
+  outline-offset: 2px;
+}
+
+.reset,
+.checks button {
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+}
+
+.checks pre {
+  background: #f3f5f8;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
