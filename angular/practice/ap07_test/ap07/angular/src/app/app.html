@@ -1,0 +1,20 @@
+<form [formGroup]="form">
+  <!-- native input: Angular's built-in DefaultValueAccessor does the work -->
+  <input formControlName="name" placeholder="name" />
+
+  <!-- custom component: our ControlValueAccessor does the work, same directive -->
+  <app-star-rating formControlName="rating" />
+
+  @if (form.controls.rating.touched && form.controls.rating.invalid) {
+    <small>pick a rating</small>
+  }
+
+  <p>
+    <button type="button" (click)="form.controls.rating.setValue(3)">setValue(3)</button>
+    <button type="button" (click)="form.reset()">reset()</button>
+    <button type="button" (click)="toggleRating()">disable / enable rating</button>
+  </p>
+</form>
+
+<pre>{{ form.getRawValue() | json }}
+status: {{ form.status }} · rating touched: {{ form.controls.rating.touched }}</pre>
