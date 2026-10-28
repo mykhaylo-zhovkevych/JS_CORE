@@ -1,0 +1,64 @@
+<form [formGroup]="logic.form" (ngSubmit)="logic.next()" class="flex max-w-sm flex-col gap-2">
+  <p>Step {{ logic.step() + 1 }} / {{ logic.lastStep + 1 }}</p>
+  <p class="text-sm italic text-gray-500">
+    Each step is its own form group. Next only validates the current step, and errors only show once a field was touched.
+  </p>
+
+  @switch (logic.step()) {
+    @case (0) {
+      <p class="text-sm italic text-gray-500">Name needs at least 2 characters, and the email must be a valid address.</p>
+      <div formGroupName="profile" class="flex flex-col gap-2">
+        <input formControlName="name" placeholder="Name" class="border p-1" />
+        <small class="text-red-600">{{ errorText(controls.profile.controls.name) }}</small>
+
+        <input formControlName="email" placeholder="Email" class="border p-1" />
+        <small class="text-red-600">{{ errorText(controls.profile.controls.email) }}</small>
+      </div>
+    }
+
+    @case (1) {
+      <p class="text-sm italic text-gray-500">
+        Type a skill and press Enter to add it, click a skill to remove it. You need at least 2 skills.
+        <code>#skillInput</code> hands the &lt;input&gt; element itself to addSkill(), which reads and clears it.
+      </p>
+      <div>
+        @for (skill of controls.skills.controls; track skill) {
+          <button type="button" (click)="logic.removeSkill($index)" class="mr-1 border px-1">
+            {{ skill.value }} ×
+          </button>
+        }
+      </div>
+      <input #skillInput placeholder="Skill + Enter" class="border p-1"
+             (keydown.enter)="$event.preventDefault(); logic.addSkill(skillInput)" />
+      <small class="text-red-600">{{ errorText(controls.skills) }}</small>
+    }
+
+    @case (2) {
+      <p class="text-sm italic text-gray-500">
+        The password needs 16+ characters, a number and an uppercase letter. The repeat must match,
+        and that check sits on the whole account group, not on a single field.
+      </p>
+      <div formGroupName="account" class="flex flex-col gap-2">
+        <input formControlName="password" type="password" placeholder="Password" class="border p-1" />
+        <small class="text-red-600">{{ errorText(controls.account.controls.password) }}</small>
+
+        <input formControlName="confirm" type="password" placeholder="Repeat password" class="border p-1" />
+        <small class="text-red-600">{{ errorText(controls.account.controls.confirm) ?? errorText(controls.account) }}</small>
+      </div>
+    }
+  }
+
+  <div class="flex gap-2">
+    <button type="button" (click)="logic.back()" [disabled]="logic.step() === 0" class="border px-2">Back</button>
+    <button type="submit" class="border px-2">{{ logic.step() === logic.lastStep ? 'Submit' : 'Next' }}</button>
+  </div>
+  <p class="text-sm italic text-gray-500">
+    Back goes one step back without validating. Next marks the step's fields as touched if something is invalid;
+    on the last step it becomes Submit.
+  </p>
+</form>
+
+@if (logic.submitted()) {
+  <p class="text-sm italic text-gray-500">The whole form value after submit, read with getRawValue():</p>
+  <pre>{{ logic.form.getRawValue() | json }}</pre>
+}
