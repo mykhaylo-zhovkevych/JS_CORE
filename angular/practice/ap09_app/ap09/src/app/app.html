@@ -1,0 +1,20 @@
+<app-shell>
+  <app-top-bar shellTop (menuToggle)="toggleMenu()" />
+
+  <app-side-nav shellAside [(active)]="section" (navigate)="navigate($event)">
+    <app-nav-item target="generate">Generate</app-nav-item>
+    <app-nav-item target="send">Send</app-nav-item>
+    <app-nav-item target="response">Response</app-nav-item>
+    <app-nav-item target="history" [badge]="api.requestCount()">History</app-nav-item>
+  </app-side-nav>
+
+  <!--
+    This element has none of the marker attributes (shellTop, shellAside, shellBottom),
+    so it matches none of the <ng-content select="..."> slots in <app-shell>.
+    Everything that matches no select ends up in the default <ng-content /> without
+    a select, which the shell places inside its <main> area.
+  -->
+  <app-dashboard-page (sectionChange)="section.set($event)" />
+
+  <app-status-bar shellBottom />
+</app-shell>

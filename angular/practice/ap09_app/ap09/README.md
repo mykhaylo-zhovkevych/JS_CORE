@@ -1,0 +1,2 @@
+- Angular: you write every possible part of the HTML in the template, and control flow switches parts on and off. Runtime-chosen structure takes the extra tools above.
+- React: the UI is JavaScript, so building it dynamically is free. The cost is that the structure is spread across your code instead of sitting in one template.
