@@ -1,0 +1,26 @@
+<form [formGroup]="form" (ngSubmit)="generate()" class="flex max-w-sm flex-col gap-2 border p-3">
+  <h2 class="font-bold">1. Generate random data (reactive)</h2>
+
+  <label class="flex flex-col">
+    Count
+    <input type="number" formControlName="count" class="border p-1" />
+  </label>
+  @if (form.controls.count.invalid && form.controls.count.touched) {
+    <small class="text-red-600">Count must be between 1 and 20</small>
+  }
+
+  <label class="flex flex-col">
+    Min
+    <input type="number" formControlName="min" class="border p-1" />
+  </label>
+
+  <label class="flex flex-col">
+    Max
+    <input type="number" formControlName="max" class="border p-1" />
+  </label>
+  @if (form.hasError('minNotBelowMax') && form.touched) {
+    <small class="text-red-600">Min must be lower than max</small>
+  }
+
+  <button type="submit" class="border px-2">Generate</button>
+</form>
