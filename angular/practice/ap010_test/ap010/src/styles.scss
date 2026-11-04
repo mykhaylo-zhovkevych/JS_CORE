@@ -1,0 +1,130 @@
+// =====================================================================
+// GLOBAL STYLES (22.1)
+// This file is listed in angular.json under "styles", so Angular bundles it
+// once and injects it into <head> as a normal, NOT encapsulated stylesheet.
+// Everything written here applies to the whole page: every component, every
+// element - except the inside of components using ViewEncapsulation.ShadowDom.
+// Good things to put here: resets, fonts, design tokens, themes and styles
+// for directives (directives cannot have their own `styles`).
+// =====================================================================
+
+// ---- 1. Design tokens -----------------------------------------------
+// CSS custom properties (variables) on :root. Components use var(--accent)
+// instead of hard-coded colours, so switching the theme means changing
+// these values only. Custom properties are INHERITED, which means they
+// even reach into ShadowDom components - plain selectors do not.
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --border: #dde0e5;
+  --text: #1d2129;
+  --muted: #6b7280;
+  --hover: #eef0f3;
+  --accent: #3b5bdb;
+  --accent-soft: #e5ebff;
+  --accent-contrast: #ffffff;
+  --danger: #c92a2a;
+  --highlight: #fff3bf;
+  --radius: 8px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  color-scheme: light;
+}
+
+// ---- 2. Dark theme ----------------------------------------------------
+// The App puts class="dark" on <html> (document.documentElement).
+// Only the token values change; no component needs its own dark-mode CSS,
+// except where we deliberately demo :host-context(.dark).
+:root.dark {
+  --bg: #15171c;
+  --surface: #1e2128;
+  --border: #2f343e;
+  --text: #e6e8ec;
+  --muted: #9aa1ad;
+  --hover: #272b33;
+  --accent: #8ea6ff;
+  --accent-soft: #263055;
+  --accent-contrast: #10131a;
+  --danger: #ff8787;
+  --highlight: #5c4d12;
+
+  color-scheme: dark;
+}
+
+// ---- 3. Reset ----------------------------------------------------------
+// The `*` selector here does NOT reach into ShadowDom components. Look at
+// the ShadowDom card in the encapsulation section: it has to bring its own
+// box-sizing, because this rule cannot get in.
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--hover);
+}
+
+// ---- 4. Tooltip styles for the appTooltip directive --------------------
+// A directive has no template and no `styles` array, so it cannot ship CSS.
+// The directive only sets attributes/classes on its host element
+// (data-tooltip, data-tooltip-pos, .tooltip-open) and these GLOBAL rules
+// turn them into a visible bubble with a ::after pseudo-element.
+// Note: ::after does not work on "replaced" elements like <input> or <img>,
+// so the tooltip only works on elements that can have content (button, span, ...).
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  translate: -50% 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 120ms,
+    translate 120ms;
+  z-index: 10;
+}
+
+[data-tooltip][data-tooltip-pos='bottom']::after {
+  bottom: auto;
+  top: calc(100% + 6px);
+  translate: -50% -4px;
+}
+
+// The class is toggled by the directive's host binding '[class.tooltip-open]'.
+[data-tooltip].tooltip-open::after {
+  opacity: 1;
+  translate: -50% 0;
+}

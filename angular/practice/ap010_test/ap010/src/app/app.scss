@@ -1,0 +1,168 @@
+// App (playground) styles. Emulated encapsulation like every component, so all
+// selectors below only match elements written in app.html - which is exactly what
+// the encapsulation lab in section 5 is about.
+
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+
+  h1 {
+    font-size: 1.1rem;
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
+main {
+  display: grid;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+
+section {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.5);
+  background: var(--surface);
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+  }
+
+  h4 {
+    margin: 0 0 6px;
+    font-size: 0.9rem;
+  }
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 4px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.8rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.stack {
+  display: grid;
+  gap: 4px;
+
+  p {
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+
+  &.three {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.pill {
+  padding: 4px 10px;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  cursor: help;
+}
+
+kbd {
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.85em;
+}
+
+.innocent {
+  font-size: 1rem;
+}
+
+.lab {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.lab-plain .tab-body {
+  border: 2px dashed var(--danger);
+}
+
+.lab-deep ::ng-deep .tab-body {
+  border: 2px dashed var(--accent);
+  padding: 12px;
+}
+
+.lab-var {
+  --tab-body-border: 2px dashed #2b8a3e;
+  --tab-body-padding: 12px;
+  --tab-body-bg: color-mix(in srgb, #2b8a3e 8%, transparent);
+}
+
+.bp-demo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  > div {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--hover);
+  }
+
+  &.compact {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,155 @@
+<header class="top">
+  <h1>Lorem Ipsum Dolor</h1>
+  <span class="muted">lorem ipsum dolor sit amet, consectetur adipiscing</span>
+  <span class="spacer"></span>
+  <button
+    uiButton
+    variant="ghost"
+    [appTooltip]="'Lorem ' + (theme() === 'dark' ? 'ipsum' : 'dolor') + ' sit'"
+    tooltipPosition="bottom"
+    (click)="toggleTheme()"
+  >
+    {{ theme() === 'dark' ? '☀ Lorem' : '☾ Ipsum' }}
+  </button>
+</header>
+
+<main>
+  <section>
+    <h2>1. Lorem ipsum <ui-badge>dolor sit</ui-badge></h2>
+    <div class="stack">
+      <p appHighlight>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p appHighlight="rgb(64 192 87 / 0.3)">Sed do eiusmod tempor incididunt ut labore et dolore</p>
+      <p appHighlight="rgb(250 82 82 / 0.3)" appTooltip="Magna aliqua ut enim ad">
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Lorem &amp; ipsum <ui-badge>dolor sit</ui-badge></h2>
+    <div class="row">
+      <button uiButton>Lorem</button>
+      <button uiButton variant="primary">Ipsum</button>
+      <button uiButton variant="ghost">Dolor</button>
+      <button uiButton variant="danger">Sit</button>
+      <button uiButton variant="primary" size="sm">Amet</button>
+      <button uiButton disabled>Consectetur</button>
+      <a uiButton>
+        Adipiscing elit sed do
+      </a>
+    </div>
+
+    <div class="row">
+      <ui-badge>lorem</ui-badge>
+      <ui-badge color="#2b8a3e">ipsum</ui-badge>
+      <ui-badge color="#e8590c">dolor</ui-badge>
+      <ui-badge color="#c92a2a">amet</ui-badge>
+      <span class="muted small">lorem ipsum dolor <code>sit amet</code></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Lorem dolor <ui-badge>ipsum sit amet</ui-badge></h2>
+    <p class="hint">
+      Lorem ipsum, dolor <kbd>Sit</kbd> amet consectetur adipiscing. Elit sed do eiusmod tempor.
+      Incididunt ut labore et dolore magna <code>aliqua</code> – ut enim ad minim
+      <code>veniam</code> quis <code>nostrud</code>.
+    </p>
+
+    <div class="row">
+      <button uiButton appTooltip="Lorem ipsum dolor">Lorem (ipsum)</button>
+      <button uiButton appTooltip="Sit amet consectetur" tooltipPosition="bottom">Dolor</button>
+      <span class="pill" tabindex="0" appTooltip="Adipiscing elit sed do eiusmod">lorem ipsum</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. Lorem – ipsum dolor, sit amet <ui-badge>consectetur</ui-badge></h2>
+    <p class="hint">
+      Lorem ipsum dolor <code>sit amet</code> consectetur adipiscing: elit (Sed),
+      eiusmod (Tempor), incididunt (Labore). Dolore magna aliqua ut enim.
+    </p>
+
+    <label class="check">
+      <input
+        type="checkbox"
+        [checked]="!!showNoneCard()"
+        (change)="showNoneCard.set($any($event.target).checked)"
+
+      />
+    </label>
+
+    <div class="grid three">
+      <ui-card-emulated title="Lorem">
+        Lorem ipsum dolor <code>sit amet</code>. Consectetur adipiscing elit.
+        <span cardFooter>sed do – eiusmod tempor incididunt</span>
+      </ui-card-emulated>
+
+      @if (showNoneCard()) {
+        <ui-card-none title="Ipsum">
+          Ut labore et <code>dolore</code> magna aliqua. Ut enim ad minim.
+        </ui-card-none>
+      }
+    </div>
+
+    <h3 class="innocent">Lorem ipsum dolor sit amet consectetur adipiscing.</h3>
+    <p class="muted small">
+      Sed do eiusmod tempor incididunt <code>ut</code> labore et dolore magna aliqua. Ut enim ad
+      minim veniam quis nostrud exercitation ullamco.
+    </p>
+  </section>
+
+  <section>
+    <h2>5. Lorem &amp; ipsum – dolor sit <ui-badge>amet</ui-badge></h2>
+
+    <div class="row">
+      <ui-dropdown label="Lorem ipsum" [(open)]="menuOpen">
+        <button type="button" (click)="pick('Lorem')">🍒 Lorem</button>
+        <button type="button" (click)="pick('Ipsum')">🍒 Ipsum</button>
+        <button type="button" (click)="pick('Dolor')">🍒 Dolor</button>
+      </ui-dropdown>
+      <span class="muted">lorem: <strong>{{ picked() ?? '–' }}</strong> · ipsum: {{ menuOpen() }}</span>
+    </div>
+
+    <div class="row">
+      <button uiButton variant="danger" (click)="modalOpen.set(true)">Lorem ipsum…</button>
+      <span class="muted">dolor: {{ deleted() }}</span>
+    </div>
+
+    <ui-modal title="Lorem ipsum dolor?" [(open)]="modalOpen">
+      Lorem ipsum dolor sit amet. Consectetur adipiscing elit sed do eiusmod.
+      <ng-container modalActions>
+        <button uiButton variant="ghost" (click)="modalOpen.set(false)">Lorem</button>
+        <button uiButton variant="danger" (click)="confirmDelete()">Ipsum</button>
+      </ng-container>
+    </ui-modal>
+  </section>
+
+  <section>
+    <h2>6. Lorem ipsum – dolor sit <ui-badge>amet</ui-badge></h2>
+    <p class="hint">
+      Lorem ipsum <code>.tab-body</code> dolor sit amet: consectetur (<code>.lab-plain</code>),
+      adipiscing (<code>::ng-deep</code>), elit (<code>--tab-body-*</code>).
+    </p>
+
+    <ui-tabs [(active)]="labTab">
+      <ui-tab label="Lorem" class="lab-plain">
+      </ui-tab>
+      <ui-tab label="Ipsum" class="lab-deep">
+      </ui-tab>
+      <ui-tab label="Dolor" class="lab-var">
+      </ui-tab>
+    </ui-tabs>
+    <p class="muted small">lorem: <strong>{{ labTab() ?? '(ipsum)' }}</strong></p>
+  </section>
+
+  <section>
+    <h2>7. Lorem ipsum – dolor sit <ui-badge>amet</ui-badge></h2>
+    <p class="hint">Lorem ipsum dolor sit amet. Consectetur 900px adipiscing elit sed do eiusmod.</p>
+
+    <div class="bp-demo" appBreakpoint [breakpoint]="900" #bp="appBreakpoint">
+      <div>lorem: <strong>{{ bp.viewportWidth() }}px</strong></div>
+      <div>ipsum: <strong>{{ bp.compact() }}</strong></div>
+      <div>dolor sit: <code>{{ bp.compact() ? 'amet' : '(lorem)' }}</code></div>
+    </div>
+  </section>
+</main>
