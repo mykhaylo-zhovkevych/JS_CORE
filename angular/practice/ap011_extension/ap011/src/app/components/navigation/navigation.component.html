@@ -1,0 +1,19 @@
+<nav class="mb-6 flex items-center gap-2">
+  <ul class="flex gap-2">
+    <li><a [routerLink]="['/simple']" routerLinkActive="active">Simple</a></li>
+    <!-- 🔒 = guarded route -->
+    <li><a [routerLink]="['/advanced']" routerLinkActive="active">🔒 Advanced</a></li>
+    <li><a [routerLink]="['/dashboard']" routerLinkActive="active">🔒 Dashboard</a></li>
+    <li><a [routerLink]="['/object-list']" routerLinkActive="active">🔒 Object list</a></li>
+  </ul>
+
+  <span class="ml-auto flex items-center gap-2 text-sm text-slate-600">
+    @if (user.user(); as u) {
+      {{ u.name }} ({{ u.role }})
+      <button type="button" (click)="logout()" class="rounded-md border border-slate-300 px-2 py-1 hover:bg-slate-100">Logout</button>
+    } @else {
+      logged out
+      <a [routerLink]="['/login']" routerLinkActive="active">Login</a>
+    }
+  </span>
+</nav>

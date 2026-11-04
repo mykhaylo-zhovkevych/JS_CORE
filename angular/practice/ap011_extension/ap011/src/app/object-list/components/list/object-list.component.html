@@ -1,0 +1,9 @@
+<div class="object-list">
+  @for (item of myObjects(); track item.id) {
+    <div (click)="redirectTo(item.id)" class="object-list__item">
+      <span>{{ item.title }}</span>
+    </div>
+  } @empty {
+    <p>No objects.</p>
+  }
+</div>

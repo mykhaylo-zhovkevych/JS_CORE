@@ -1,0 +1,56 @@
+<!-- leaving this page runs unsavedChangesGuard (canDeactivate) -->
+<a routerLink=".." class="mb-4 inline-block text-sm text-slate-500 hover:text-slate-900">← Back to list</a>
+
+@if (object(); as object) {
+  <div class="object">
+    <h3>{{ object.title }} #{{ object.id }}</h3>
+
+    @switch (object.priority) {
+      @case ('high')   { <strong class="text-red-600">High priority</strong> }
+      @case ('medium') { <strong class="text-amber-600">Medium priority</strong> }
+      @default         { <strong class="text-slate-500">Low priority</strong> }
+    }
+
+    <div class="flex gap-2">
+      @for (p of priorities; track p) {
+        <button
+          type="button"
+          (click)="changePriority(p)"
+          [disabled]="p === object.priority"
+          [class.bg-slate-900]="p === object.priority"
+          [class.text-white]="p === object.priority"
+          class="rounded-md border border-slate-300 px-3 py-1 text-sm capitalize transition hover:bg-slate-100 disabled:cursor-default disabled:hover:bg-slate-900"
+        >
+          {{ p }}
+        </button>
+      }
+    </div>
+
+    <small class="text-slate-500">Last updated: {{ object.updatedAt | date: 'medium' }}</small>
+
+    <span>{{ object.content }}</span>
+
+    @let count = object.comments.length;
+    <h4 class="font-semibold">{{ count }} comment{{ count === 1 ? '' : 's' }}</h4>
+
+    <div class="flex flex-col gap-2">
+      @for (c of object.comments; track c.id; let i = $index, last = $last) {
+        <my-comment-item [comment]="c" (remove)="removeComment($event)" />
+        @if (last) {
+          <small class="text-slate-400">— end of {{ i + 1 }} comments —</small>
+        }
+      } @empty {
+        <p class="text-slate-500">No comments yet. Be the first!</p>
+      }
+    </div>
+
+    <!-- (input) writes every keystroke into draft -> the guard can see unsaved text -->
+    <div class="flex gap-2">
+      <input #box [value]="draft()" (input)="draft.set(box.value)" (keydown.enter)="addComment()"
+             placeholder="Write a comment…" class="flex-1 rounded-md border border-slate-300 px-3 py-1" />
+      <button type="button" (click)="addComment()" class="rounded-md bg-slate-900 px-3 py-1 text-white hover:bg-slate-700">Add</button>
+    </div>
+  </div>
+} @else {
+  <p>Object #{{ id() }} not found.</p>
+}
