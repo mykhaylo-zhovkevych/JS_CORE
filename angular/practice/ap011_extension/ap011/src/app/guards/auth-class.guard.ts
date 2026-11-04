@@ -15,10 +15,7 @@ export class AuthClassGuard implements CanActivate {
     private readonly router: Router,
   ) {}
 
-  // route = the route being activated (params, data ...)
-  // state = the whole target router state; state.url is the url the user wanted
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
-    //console.log('[AuthClassGuard] canActivate', state.url);
 
     if (this.user.isLoggedIn()) return true;
     return this.router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });

@@ -5,7 +5,6 @@ export interface HasUnsavedChanges {
 }
 
 export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = (component) => {
-  //console.log('[unsavedChangesGuard]', component.hasUnsavedChanges());
 
   return !component.hasUnsavedChanges() || confirm('You have an unsaved comment. Leave anyway?');
 };

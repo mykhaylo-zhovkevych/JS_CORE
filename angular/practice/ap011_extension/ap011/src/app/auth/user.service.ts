@@ -1,5 +1,4 @@
 import { Injectable, computed, signal } from '@angular/core';
-// Same pattern as ObjectStore: private writable signal, public read-only view.
 
 export type Role = 'user' | 'admin';
 

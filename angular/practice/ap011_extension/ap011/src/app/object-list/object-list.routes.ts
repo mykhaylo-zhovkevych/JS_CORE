@@ -5,6 +5,5 @@ import { unsavedChangesGuard } from './unsaved-changes.guard';
 
 export const objectListRoutes: Routes = [
   { path: '', component: MyObjectListComponent },
-  // 23.5 canDeactivate – asked when you try to LEAVE this page
   { path: ':id', component: MyObjectItemComponent, canDeactivate: [unsavedChangesGuard] },
 ];

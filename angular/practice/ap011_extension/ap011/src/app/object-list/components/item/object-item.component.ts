@@ -6,8 +6,6 @@ import { PRIORITIES, Priority } from '../../objects.data';
 import { MyCommentItemComponent } from '../comment/comment-item.component';
 import { HasUnsavedChanges } from '../../unsaved-changes.guard';
 
-// `implements HasUnsavedChanges` is the contract unsavedChangesGuard relies on:
-// the guard receives THIS instance and calls hasUnsavedChanges() on it.
 @Component({
   selector: 'my-object-item',
   imports: [DatePipe, RouterLink, MyCommentItemComponent],
@@ -22,11 +20,8 @@ export class MyObjectItemComponent implements HasUnsavedChanges {
   public object = this.store.byId(() => Number(this.id()));
   protected readonly priorities = PRIORITIES;
 
-  // the text in the comment box. In ap03 the <input> had no state at all (#box only),
-  // so there was nothing a guard could ask. Now every keystroke is kept here.
   protected readonly draft = signal('');
 
-  // canDeactivate: something typed but not added yet = unsaved
   public hasUnsavedChanges(): boolean {
     return this.draft().trim().length > 0;
   }
@@ -42,7 +37,6 @@ export class MyObjectItemComponent implements HasUnsavedChanges {
     const current = this.object();
     if (!current || !text) return;
     this.store.addComment(current.id, text);
-    // saved -> nothing unsaved anymore, the guard lets you leave without asking
     this.draft.set('');
   }
 

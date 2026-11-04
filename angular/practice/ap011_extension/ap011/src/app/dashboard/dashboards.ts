@@ -1,9 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { UserService } from '../auth/user.service';
 
-// Two pages behind the SAME url /dashboard. Which one you get is decided by
-// canMatch (adminMatch) in app.routes.ts – see guards/admin.guard.ts.
-
 @Component({
   selector: 'app-admin-dashboard',
   template: `
