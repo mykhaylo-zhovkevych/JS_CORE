@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { MyLayout } from './components/navigation/layout.component';
 
 @Component({
@@ -7,6 +7,4 @@ import { MyLayout } from './components/navigation/layout.component';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
-  protected readonly title = signal('ap011');
-}
+export class App {}

@@ -1,6 +1,7 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, DestroyRef, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { Role, UserService } from './user.service';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-login',
@@ -17,12 +18,18 @@ import { Role, UserService } from './user.service';
       @if (user.user(); as u) {
         <p class="text-sm text-slate-600">Already logged in as {{ u.name }} ({{ u.role }}).</p>
       } @else {
-        <div class="flex gap-2">
-          <button type="button" (click)="login('user')"
-                  class="rounded-md bg-slate-900 px-3 py-1.5 text-white hover:bg-slate-700">Log in as user</button>
-          <button type="button" (click)="login('admin')"
-                  class="rounded-md bg-emerald-600 px-3 py-1.5 text-white hover:bg-emerald-700">Log in as admin</button>
-        </div>
+        <!-- preventDefault: stop the browser from reloading the page on submit -->
+        <form class="flex flex-col gap-2" (submit)="$event.preventDefault(); login(pw.value)">
+          <input #pw type="password" placeholder="Password (hint: angular)" [disabled]="loading()"
+                 class="rounded-md border border-slate-300 px-3 py-1.5" />
+          <button type="submit" [disabled]="loading()"
+                  class="rounded-md bg-slate-900 px-3 py-1.5 text-white hover:bg-slate-700 disabled:opacity-50">
+            {{ loading() ? 'Logging in…' : 'Log in' }}
+          </button>
+          @if (error(); as e) {
+            <p class="text-sm text-red-600">{{ e }}</p>
+          }
+        </form>
       }
     </section>
   `,
@@ -30,11 +37,34 @@ import { Role, UserService } from './user.service';
 export class LoginPage {
   protected readonly user = inject(UserService);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   public readonly returnUrl = input<string>();
 
-  protected login(role: Role): void {
-    this.user.login(role);
-    this.router.navigateByUrl(this.returnUrl() ?? '/dashboard');
+  protected readonly loading = signal(false);
+  protected readonly error = signal<string | null>(null);
+
+  protected login(password: string): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.user.login(password)
+      // In-app navigation only: if the user clicks another nav link during the 1000 ms,
+      // this component is destroyed -> unsubscribe -> the login is cancelled, so we don't
+      // yank them back to the dashboard. (A refresh or closed tab kills all JS anyway)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.router.navigateByUrl(this.safeReturnUrl()),
+        error: (err: Error) => {
+          this.error.set(err.name);
+          this.loading.set(false);
+        },
+      });
+  }
+
+  // Only allow paths inside this app ("/x"), never "//evil.com" or "https://..."
+  private safeReturnUrl(): string {
+    const url = this.returnUrl();
+    return url?.startsWith('/') && !url.startsWith('//') ? url : '/dashboard';
   }
 }
