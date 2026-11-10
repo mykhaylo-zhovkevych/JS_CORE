@@ -1,0 +1,16 @@
+{
+  "books": [
+    { "id": "1", "title": "The Hobbit", "author": "J. R. R. Tolkien", "year": 1937 },
+    { "id": "2", "title": "The Lord of the Rings", "author": "J. R. R. Tolkien", "year": 1954 },
+    { "id": "3", "title": "Dune", "author": "Frank Herbert", "year": 1965 },
+    { "id": "4", "title": "Neuromancer", "author": "William Gibson", "year": 1984 },
+    { "id": "5", "title": "The Left Hand of Darkness", "author": "Ursula K. Le Guin", "year": 1969 },
+    { "id": "6", "title": "A Wizard of Earthsea", "author": "Ursula K. Le Guin", "year": 1968 },
+    { "id": "7", "title": "Foundation", "author": "Isaac Asimov", "year": 1951 },
+    { "id": "8", "title": "I, Robot", "author": "Isaac Asimov", "year": 1950 },
+    { "id": "9", "title": "Snow Crash", "author": "Neal Stephenson", "year": 1992 },
+    { "id": "10", "title": "The Hitchhiker's Guide to the Galaxy", "author": "Douglas Adams", "year": 1979 },
+    { "id": "11", "title": "Brave New World", "author": "Aldous Huxley", "year": 1932 },
+    { "id": "12", "title": "Nineteen Eighty-Four", "author": "George Orwell", "year": 1949 }
+  ]
+}
